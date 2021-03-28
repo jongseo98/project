@@ -25,12 +25,11 @@ public class ReadData {
     public static void main(String[] args){
         try{
             // Scanner로 input 값 입력 받기
-            Scanner scanner = new Scanner(System.in);
-            String movie_input = scanner.next();
-            String occup_input = scanner.next();
+            // Scanner scanner = new Scanner(System.in);
+            String movie_input = args[0];
+            String occup_input = args[1];
             // System.out.println("movie: " + movie_input + " occup: " + occup_input);
             // String input = input.replace(" ", ""); // Input 공백 제거
-            scanner.close();
 
             //파일 객체 생성
             File moviefile = new File("/root/project/project1/data/ml-1m/movies.dat");
@@ -70,6 +69,7 @@ public class ReadData {
                 String[] userwords = userline.split("::");
                 String userId = userwords[0];
                 int userOccup = Integer.parseInt(userwords[3]);
+                occup_input = occup_input.toLowerCase();
                 if (occup_list[userOccup].contains(occup_input)) {
                     // System.out.println("userId: " + userId);
                     userIds.add(userId);
