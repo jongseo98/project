@@ -27,6 +27,7 @@ public class ReadData {
             String occup_input = args[1];
             System.out.println(movie_input);
             System.out.println(occup_input);
+
             // System.out.println("movie: " + movie_input + " occup: " + occup_input);
             // String input = input.replace(" ", ""); // Input 공백 제거
 
@@ -49,8 +50,8 @@ public class ReadData {
                 String moviegenre = moviewords[2];
                 String[] genres = moviegenre.split("\\|"); // 특수문자 | 는 앞에 \\가 붙어야 구분가능
 
-                if (movie_input.contains("+")) {
-                    String[] movie_inputs = movie_input.split("\\+");
+                if (movie_input.contains("|")) {
+                    String[] movie_inputs = movie_input.split("\\|");
                     boolean flag = false;
                     for (String input: movie_inputs) {
                         flag = false;
