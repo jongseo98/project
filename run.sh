@@ -2,7 +2,7 @@
 
 git clone https://github.com/20171119/project.git
 
-cd project1
+cd project/project1
 
 mvn install
 
