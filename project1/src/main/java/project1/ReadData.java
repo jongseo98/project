@@ -16,11 +16,6 @@ public class ReadData {
         "tradesman/craftsman", "unemployed", "writer"
     };
 
-    // public String OccupToNum(String occup) {
-    //     String num="";
-    //     if ()
-    //     return num;
-    // }
     public static void main(String[] args){
         try{
             String movie_input = args[0];
@@ -124,7 +119,7 @@ public class ReadData {
             System.out.println("num: " + rating_num);
             double rating_avg = rating_sum/rating_num;
             if (rating_sum == 0 || rating_num == 0)
-                System.out.println("rating: " + 0);
+                System.out.println("Error. This inputs can't be aceepted. Try again");
             else  
                 System.out.println("rating: " + rating_avg);    
 
