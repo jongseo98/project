@@ -6,4 +6,6 @@ cd project1
 
 mvn install
 
-java -cp target/project1-1.0-SNAPSHOT.jar project1.App
+mvn assembly:assembly
+
+java -cp target/cse364-project1-1.0-SNAPSHOT-jar-with-dependencies.jar ReadData.java Adventure educator
