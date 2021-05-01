@@ -115,8 +115,6 @@ public class ReadData {
                 }
             }
 
-            System.out.println("rating_sum: " + rating_sum); 
-            System.out.println("num: " + rating_num);
             double rating_avg = rating_sum/rating_num;
             if (rating_sum == 0 || rating_num == 0)
                 System.out.println("Error. This inputs can't be aceepted. Try again");
