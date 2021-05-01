@@ -8,4 +8,4 @@ mvn install
 
 mvn assembly:assembly
 
-java -cp target/cse364-project1-1.0-SNAPSHOT-jar-with-dependencies.jar ReadData.java Adventure educator
+java -cp target/cse364-project-1.0-SNAPSHOT-jar-with-dependencies.jar ReadData.java Adventure educator
