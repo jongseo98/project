@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-11-openjdk-amd64/lib"/>
-    <property name="sun.java.command" value="/root/project/project1/target/surefire/surefirebooter1094110381081548239.jar /root/project/project1/target/surefire 2021-05-02T01-51-49_155-jvmRun1 surefire8865376434832246258tmp surefire_03689399175447433412tmp"/>
+    <property name="sun.java.command" value="/root/project/project1/target/surefire/surefirebooter6973660717839691910.jar /root/project/project1/target/surefire 2021-05-02T05-03-55_470-jvmRun1 surefire16123584321873740724tmp surefire_013636927728981436838tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/root/project/project1/target/test-classes:/root/project/project1/target/classes:/root/.m2/repository/junit/junit/4.11/junit-4.11.jar:/root/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -31,7 +31,7 @@
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
-    <property name="surefire.real.class.path" value="/root/project/project1/target/surefire/surefirebooter1094110381081548239.jar"/>
+    <property name="surefire.real.class.path" value="/root/project/project1/target/surefire/surefirebooter6973660717839691910.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="11.0.10+9-Ubuntu-0ubuntu1.20.04"/>
     <property name="user.name" value="root"/>

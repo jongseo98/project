@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Arrays;
 import java.util.Comparator;
 // import java.util.Scanner;
@@ -33,12 +32,29 @@ public class Recommend1 {
             // String movie_input = args[0];
             // String occup_input = args[1];
             String gender_input = args[0];
-            int age_input = Integer.parseInt(args[1]);
+            int age_input = 0;
+            if (!args[1].isEmpty())
+                age_input = Integer.parseInt(args[1]);
             String occup_input = args[2];
-
-            System.out.println("gender_input: " + gender_input);
-            System.out.println("age_input: " + age_input);
-            System.out.println("occup_input: " + occup_input);
+            String genre_input = "";
+            if (args.length > 3)
+                genre_input = args[3];
+            
+            boolean gender_null = false;
+            boolean age_null = false;
+            boolean occup_null = false;
+            boolean genre_null = false;
+            
+            if (args[0].isEmpty())
+                gender_null = true;
+            if (args[1].isEmpty())
+                age_null = true;
+            if (args[2].isEmpty())
+                occup_null = true;
+            if (args.length > 3) {
+                if (args[3].isEmpty())
+                    genre_null = true;
+            }
 
             //파일 객체 생성
             File moviefile = new File("/root/project/project1/data/ml-1m/movies.dat");
@@ -58,24 +74,24 @@ public class Recommend1 {
             // * 45:  "45-49"
             // * 50:  "50-55"
             // * 56:  "56+"
-            String age_index;
-            if (age_input < 18) {
-                age_index = "1";
-            } else if (age_input < 25) {
-                age_index = "18";
-            } else if (age_input < 35) {
-                age_index = "25";
-            } else if (age_input < 45) {
-                age_index = "35";
-            } else if (age_input < 50) {
-                age_index = "45";
-            } else if (age_input < 56) {
-                age_index = "50";
-            } else {
-                age_index = "56";
+            String age_index = "0";
+            if (!args[1].isEmpty()) {
+                if (age_input < 18) 
+                    age_index = "1";
+                else if (age_input < 25)
+                    age_index = "18";
+                else if (age_input < 35)
+                    age_index = "25";
+                else if (age_input < 45)
+                    age_index = "35";
+                else if (age_input < 50)
+                    age_index = "45";
+                else if (age_input < 56)
+                    age_index = "50";
+                else
+                    age_index = "56";
             }
-
-            System.out.println("age_index: " + age_index);
+            // System.out.println("age_index: " + age_index);
 
             String userline = "";
             ArrayList<String> userIdList = new ArrayList<String>();
@@ -91,16 +107,20 @@ public class Recommend1 {
                 if (occup_list[userOccup].contains("/")) {
                     String[] occups = occup_list[userOccup].split("/");
                     for (String s: occups)
-                        if (s.equalsIgnoreCase(occup_input) && userGender.equalsIgnoreCase(gender_input) && userAge.equals(age_index))
+                        if ((s.equalsIgnoreCase(occup_input) || occup_null) && (userGender.equalsIgnoreCase(gender_input) || gender_null) && (userAge.equals(age_index) || age_null)){
+
                             userIdList.add(userId);
+                            break;
+                        }
                 } else {
-                    if (occup_list[userOccup].equalsIgnoreCase(occup_input) && userGender.equalsIgnoreCase(gender_input) && userAge.equals(age_index))
+                    if ((occup_list[userOccup].equalsIgnoreCase(occup_input) || occup_null) && (userGender.equalsIgnoreCase(gender_input) || gender_null) && (userAge.equals(age_index) || age_null))
                         userIdList.add(userId);
                 }
                 // userIdList.add(userId);
                 // if (occup_list[userOccup].equals(occup_input))
                 //     userIdList.add(userId);
             }
+
 
             // double rating_sum = 0;
             // double rating_num = 0;
@@ -179,30 +199,138 @@ public class Recommend1 {
                 }
             }
 
-            
-
-
-            // Arrays.sort(movieGroup, new Comparator<double[]>(){
-            //     public int compare(double[] o1, double[] o2) {
-            //         return Double.compare(o2[2], o1[2]);
-            //     }
-            // });
-            
-            int num = 0;
-    
-
-            for(int i=0 ; i<count; i++) { 
-                for(int j=0 ; j<4; j++){ 
-                    if (movieGroup[count-i-1][2] >= (ratecount / count)) {
-                        num++;
-                        System.out.println("movieGroup["+(count-i-1)+"]["+j+"] = " + movieGroup[count-i-1][j]);
+            String movieline = "";
+            // ArrayList<String> movieIds = new ArrayList<String>();
+            if (args.length > 3) {
+                if(!genre_null)
+                {
+                    // System.out.println("A");
+                    String [][] movie_list = new String[10][2];
+                    boolean flag2 = false;
+                    int check_index = 0;
+                    int count_num = 0;
+                    while((movieline = moviebuf.readLine()) != null){
+                        String[] moviewords = movieline.split("::");
+                        Integer movieId = Integer.parseInt(moviewords[0]);
+                        String movieName = moviewords[1];
+                        String moviegenre = moviewords[2];
+                        String[] genres = moviegenre.split("\\|"); // 특수문자는 앞에 \\가 붙어야 구분가능
+                        if (genre_input.contains("|")) {
+                            // System.out.println("B");
+                            String[] genre_list = genre_input.split("\\|");
+                            boolean flag = false;
+                            for (String input: genre_list) {
+                                flag = false;
+                                for (String s: genres) {
+                                    if (input.equalsIgnoreCase(s)) {
+                                        flag = true;
+                                        // System.out.println("C");
+                                        break;
+                                    }
+                                }
+                                if (flag)
+                                    break;
+                            }
+                            if (flag) {
+                                // System.out.println("D");
+                                for (; check_index < count; check_index++) {
+                                    // System.out.println("A");
+                                    System.out.println((int)movieGroup[check_index][0]);
+                                    System.out.println(movieId);
+                                    if ((int)movieGroup[check_index][0] == movieId) {
+                                        movie_list[count_num][0] = Integer.toString(movieId);
+                                        movie_list[count_num][1] = movieName;
+                                        count_num++;
+                                        System.out.println("count_num: " + count_num);
+                                        break;
+                                    }
+                                    if (count_num >=10) {
+                                        flag = true;
+                                        break;
+                                    }  
+                                }
+                            }
+                            // System.out.println("E");
+                        } else {
+                            System.out.println("A");
+                            boolean flag =false;
+                            for (String s: genres) {
+                                if (genre_input.equalsIgnoreCase(s)) { // 대소문자 상관없이 input 값과 비교
+                                    // (movieId, rating_sum, rating_num, rating_avg) 
+                                    System.out.println("check_index: " + check_index);
+                                    for (; check_index < count; check_index++) {
+                                        if (movieGroup[check_index][0] == movieId) {
+                                            movie_list[count_num][0] = Integer.toString(movieId);
+                                            movie_list[count_num][1] = movieName;
+                                            count_num++;
+                                            System.out.println("count_num: " + count_num);
+                                            flag = true;
+                                            break;
+                                        }   
+                                    }
+                                    if (flag) {
+                                        flag2 = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (flag2)
+                            break;
                     }
-                } 
+                    for (int i=0; i<10; i++) {
+                        System.out.println("movie_list[][0]: " + movie_list[i][0]);
+                        System.out.println("movie_list[][1]: " + movie_list[i][1]);
+                    }
+
+                    String linkline = "";
+                    String [] link_list = new String[10];
+                    while((linkline = linkbuf.readLine()) != null){
+                        String[] linkwords = linkline.split("::");
+                        Integer movieId = Integer.parseInt(linkwords[0]);
+                        String imdbId = linkwords[1];
+                        for (int i=0; i<10; i++) {
+                            if (movieId == Integer.parseInt(movie_list[i][0])) {
+                                link_list[i] = imdbId;
+                            }
+                        }
+                    }
+
+                    for (int i=0; i<10; i++)
+                        System.out.println(movie_list[i][1] + " http://www.imdb.com/title/tt" + link_list[i]);                        
+                }
+            } else {
+                System.out.println("A");
+                String linkline = "";
+                String [] link_list = new String[10];
+                while((linkline = linkbuf.readLine()) != null){
+                    String[] linkwords = linkline.split("::");
+                    Integer movieId = Integer.parseInt(linkwords[0]);
+                    String imdbId = linkwords[1];
+                    for (int i=0; i<10; i++) {
+                        if (movieId == movieGroup[i][0]) {
+                            link_list[i] = imdbId;
+                            System.out.println("link_list: " + link_list[i]);
+                        }
+                    }
+                }
+                while((movieline = moviebuf.readLine()) != null){
+                    String[] moviewords = movieline.split("::");
+                    Integer movieId = Integer.parseInt(moviewords[0]);
+                    String movieName = moviewords[1];
+                    // String moviegenre = moviewords[2];
+                    // String[] genres = moviegenre.split("\\|"); // 특수문자 | 는 앞에 \\가 붙어야 구분가능
+                    for (int i=0; i<10; i++) {
+                        if (movieId == movieGroup[i][0]) {
+                            System.out.println(movieName + " http://www.imdb.com/title/tt" + link_list[i]);                        
+                        }
+                    }
+                }
             }
-            System.out.println(num/4);
+            
             System.out.println("count: "+count);
             System.out.println("ratecount: "+ratecount);
-            
+            System.out.println("UseridSize: "+userIdList.size());
 
             moviebuf.close();
             ratingbuf.close();
