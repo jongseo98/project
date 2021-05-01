@@ -8,3 +8,5 @@ mvn install
 mvn assembly:assembly
 
 java -cp target/cse364-project-1.0-SNAPSHOT-jar-with-dependencies.jar project1.ReadData adventure artist
+
+java -cp target/cse364-project-1.0-SNAPSHOT-jar-with-dependencies.jar project1.Recommend1 F 25 Gradstudent
