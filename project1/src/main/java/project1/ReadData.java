@@ -117,7 +117,7 @@ public class ReadData {
             if (rating_sum == 0 || rating_num == 0)
                 System.out.println("Error. This inputs can't be aceepted. Try again");
             else  
-                System.out.println("rating: " + rating_avg);    
+                System.out.println(rating_avg);    
 
             //.readmovieline()은 끝에 개행문자를 읽지 않는다.            
             moviebuf.close();
