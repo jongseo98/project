@@ -5,32 +5,26 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.ArrayList;
 
 public class ReadData {
 
     public static final String[] occup_list = new String[]{
-        "other","academic/educator", "artist", "clerical/admin", "college/grad student", "customer service", 
-        "doctor/health care", "executive/managerial", "farmer", "homemaker", "K-12 student", "lawyer", 
+        "other","academic/educator", "artist", "clerical/admin", "college/gradstudent", "customerservice", 
+        "doctor/healthcare", "executive/managerial", "farmer", "homemaker", "K-12student", "lawyer", 
         "programmer", "retired", "sales/marketing", "scientist", "self-employed", "technician/engineer", 
         "tradesman/craftsman", "unemployed", "writer"
     };
 
-    // public String OccupToNum(String occup) {
-    //     String num="";
-    //     if ()
-    //     return num;
-    // }
     public static void main(String[] args){
         try{
-            // Scanner로 input 값 입력 받기
-            Scanner scanner = new Scanner(System.in);
-            String movie_input = scanner.next();
-            String occup_input = scanner.next();
+            String movie_input = args[0];
+            String occup_input = args[1];
+            System.out.println(movie_input);
+            System.out.println(occup_input);
+
             // System.out.println("movie: " + movie_input + " occup: " + occup_input);
             // String input = input.replace(" ", ""); // Input 공백 제거
-            scanner.close();
 
             //파일 객체 생성
             File moviefile = new File("/root/project/project1/data/ml-1m/movies.dat");
@@ -50,12 +44,32 @@ public class ReadData {
                 String[] moviewords = movieline.split("::");
                 String moviegenre = moviewords[2];
                 String[] genres = moviegenre.split("\\|"); // 특수문자 | 는 앞에 \\가 붙어야 구분가능
-                for (String s: genres) {
-                    if (movie_input.equalsIgnoreCase(s) || movie_input.equalsIgnoreCase(moviegenre)) { // 대소문자 상관없이 input 값과 비교
-                        // System.out.println(movieline);
+
+                if (movie_input.contains("|")) {
+                    String[] movie_inputs = movie_input.split("\\|");
+                    boolean flag = false;
+                    for (String input: movie_inputs) {
+                        flag = false;
+                        for (String s: genres) {
+                            if (input.equalsIgnoreCase(s)) { 
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if (!flag)
+                            break;
+                    }
+                    if (flag) {
                         String movieId = moviewords[0];
                         movieIds.add(movieId);
-                        break;
+                    }
+                } else {
+                    for (String s: genres) {
+                        if (movie_input.equalsIgnoreCase(s)) { // 대소문자 상관없이 input 값과 비교
+                            String movieId = moviewords[0];
+                            movieIds.add(movieId);
+                            break;
+                        }
                     }
                 }
             }
@@ -70,10 +84,21 @@ public class ReadData {
                 String[] userwords = userline.split("::");
                 String userId = userwords[0];
                 int userOccup = Integer.parseInt(userwords[3]);
-                if (occup_list[userOccup].contains(occup_input)) {
-                    // System.out.println("userId: " + userId);
-                    userIds.add(userId);
+                // occup_input = occup_input.toLowerCase();
+                if (occup_list[userOccup].contains("/")) {
+                    String[] occups = occup_list[userOccup].split("/");
+                    for (String s: occups) {
+                        if (s.equalsIgnoreCase(occup_input))
+                            userIds.add(userId);
+                    }
+                } else {
+                    if (occup_list[userOccup].equalsIgnoreCase(occup_input))
+                        userIds.add(userId);
                 }
+
+                // userIds.add(userId);
+                if (occup_list[userOccup].equals(occup_input))
+                    userIds.add(userId);
             }
 
             // UserID::MovieID::Rating::Timestamp - rating.dat
@@ -91,9 +116,12 @@ public class ReadData {
             }
 
             System.out.println("rating_sum: " + rating_sum); 
-            System.out.println("num: " + rating_num); 
+            System.out.println("num: " + rating_num);
             double rating_avg = rating_sum/rating_num;
-            System.out.println("rating: " + rating_avg);    
+            if (rating_sum == 0 || rating_num == 0)
+                System.out.println("Error. This inputs can't be aceepted. Try again");
+            else  
+                System.out.println("rating: " + rating_avg);    
 
             //.readmovieline()은 끝에 개행문자를 읽지 않는다.            
             moviebuf.close();
