@@ -20,8 +20,6 @@ public class ReadData {
         try{
             String movie_input = args[0];
             String occup_input = args[1];
-            System.out.println(movie_input);
-            System.out.println(occup_input);
 
             // System.out.println("movie: " + movie_input + " occup: " + occup_input);
             // String input = input.replace(" ", ""); // Input 공백 제거
