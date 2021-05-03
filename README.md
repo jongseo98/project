@@ -1,18 +1,18 @@
 # 1.Project2 Algorithm
 
-In project2, we get 3 to 4 arguments as an input.       
-First argument is gender, second is age, third is occupation, fourth is genre.           
-Our algorithm gets the argument and makes the userIdList that equals the input (gender, age, occupation) in users.dat file. 
-userIdList contains (userId).
-By using userIdList, we makes movieGroup that equals userId in userIdList for rating.dat file.
-movieGroup contains (movieId, rating_sum, rating_num, rating_avg).
-Sort movieGroup in order of rating_avg, if same, sort order of rating_num. (descending order)
-if genre input exists, among the movies in movieGroup, 10 movies that equals the genre input in order of index, extract and add to the movielist for movies.dat file.
-else if genre input doesn't exists, extract 10 movies in the movieGroup in order of index, add to the movielist for movies.dat file.
-movie_list contains (movieId, movieName).
-In links.dat, make link_list that equals movieId in movie_list.
-link_list contains (imdbId).
-Print movie_list and link_list.          
+In project2, we get 3 to 4 arguments as an input.        
+First argument is gender, second is age, third is occupation, fourth is genre.             
+Our algorithm gets the argument and makes the userIdList that equals the input (gender, age, occupation) in users.dat file.    
+userIdList contains (userId).    
+By using userIdList, we makes movieGroup that equals userId in userIdList for rating.dat file.    
+movieGroup contains (movieId, rating_sum, rating_num, rating_avg).    
+Sort movieGroup in order of rating_avg, if same, sort order of rating_num. (descending order)      
+if genre input exists, among the movies in movieGroup, 10 movies that equals the genre input in order of index, extract and add to the movielist for movies.dat file.      
+else if genre input doesn't exists, extract 10 movies in the movieGroup in order of index, add to the movielist for movies.dat file.     
+movie_list contains (movieId, movieName).     
+In links.dat, make link_list that equals movieId in movie_list.      
+link_list contains (imdbId).     
+Print movie_list and link_list.               
 
 ### Criteria of data:
 When userIdList is given, there will be the number of ratings committed by user ID and the number of movies that are rated by userIdList. We divide number of ratings committed(ratecount) by number of movies rated by movieGroup(count), so that we can achieve average number of ratings committed to each movie by user groups. We define data as valid only if the movie has more ratings committed than the number of ratings committed to each movie by user groups.          
