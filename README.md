@@ -47,7 +47,7 @@ Prints out-> "Error. User age cannot be under 0"
 Prints out-> "Error. The occupation does not exist"           
 5) If you input genre not in the genre list, ex) “F” 65” “artist” “American”          
 Prints out-> "Error. The movie genre does not exist"          
-6)If you put all inputs are right in form it prints out output as:   
+6) If you put all inputs are right in form it prints out output as:   
                
 Input: "" "" "" "Adventure"           
          
