@@ -39,7 +39,7 @@ java -cp target/cse364-project-1.0-SNAPSHOT-jar-with-dependencies.jar project2.R
 Our program supports such inputs and outputs:          
 1) If you input less than 3 arguments, ex) “F” “ ”            
 Prints out-> "Error. The number of input should be at least 3."              
-2.) If you put wrong Gender, ex) “L” “25” “farmer”          
+2) If you put wrong Gender, ex) “L” “25” “farmer”          
 Prints out-> "Error. User gender is F or M"          
 3) If you input wrong age, ex) “M” “-30” “homemaker”          
 Prints out-> "Error. User age cannot be under 0"            
