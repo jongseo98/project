@@ -105,7 +105,7 @@ public class Recommend {
             }
 
             // genre_input이 genre_list에 없는 경우
-            if (arg.length > 3) {
+            if (args.length > 3) {
                 if (!genre_null) {
                     boolean genre_bool = false;
                     if (genre_input.contains("|")) {
