@@ -43,7 +43,7 @@ Prints out-> "Error. The number of input should be at least 3."
 Prints out-> "Error. User gender is F or M"          
 3) If you input wrong age, ex) “M” “-30” “homemaker”          
 Prints out-> "Error. User age cannot be under 0"            
-4) If you input the occupation not in the occupation list, ex) “M” “25” “Wizard”           
+4) If you input the occupation not in the occupation list, ex) “M” “25” “Wizard” or “M” “25” “Grad student”(can't recognize space)
 Prints out-> "Error. The occupation does not exist"           
 5) If you input genre not in the genre list, ex) “F” 65” “artist” “American”          
 Prints out-> "Error. The movie genre does not exist"          
