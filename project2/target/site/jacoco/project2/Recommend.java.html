@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Recommend.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project2</a> &gt; <a href="index.source.html" class="el_package">project2</a> &gt; <span class="el_source">Recommend.java</span></div><h1>Recommend.java</h1><pre class="source lang-java linenums">package project2;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+// import java.util.Scanner;
+// import java.util.Arrays;
+
+<span class="fc" id="L14">public class Recommend {</span>
+
+<span class="fc" id="L16">    public static final String[] occup_list = new String[]{</span>
+        &quot;other&quot;,&quot;academic/educator&quot;, &quot;artist&quot;, &quot;clerical/admin&quot;, &quot;college/gradstudent&quot;, &quot;customerservice&quot;, 
+        &quot;doctor/healthcare&quot;, &quot;executive/managerial&quot;, &quot;farmer&quot;, &quot;homemaker&quot;, &quot;K-12student&quot;, &quot;lawyer&quot;, 
+        &quot;programmer&quot;, &quot;retired&quot;, &quot;sales/marketing&quot;, &quot;scientist&quot;, &quot;self-employed&quot;, &quot;technician/engineer&quot;, 
+        &quot;tradesman/craftsman&quot;, &quot;unemployed&quot;, &quot;writer&quot;
+    };
+<span class="fc" id="L22">    public static final String[] movie_genre_list = new String[]{</span>
+        &quot;Action&quot;, &quot;Adventure&quot;, &quot;Animation&quot;, &quot;Children's&quot;, &quot;Comedy&quot;, &quot;Crime&quot;, &quot;Documentary&quot;, &quot;Drama&quot;, &quot;Fantasy&quot;, 
+        &quot;Film-Noir&quot;, &quot;Horror&quot;, &quot;Musical&quot;, &quot;Mystery&quot;, &quot;Romance&quot;, &quot;Sci-Fi&quot;, &quot;Thriller&quot;, &quot;War&quot;, &quot;Western&quot;
+    };
+
+    // gender:age:occup =&gt; user.dat 파일에서 일치하는 user 를 userID list에 추가
+    // rating.dat 파일에서 해당 user가 쓴 평점을 통해 movieGroup에 (movieId, rating_sum, rating_num, rating_avg) 추가
+    // movieGroup을 rating_avg 순으로 정렬, 같다면 rating_num 순으로 내림차순 정렬 
+    // 만약 genre도 input 있을때, movieGroup 안에 있는 영화중 해당 장르에 속한 영화
+    // genre input 없을때,  movieGroup 안에 있는 영화중 rating_num &gt; count/rating_count 를 넘은 영화를 추출해서 movie_list 에 (movieId, movieName)으로 저장
+    // links.dat 파일에서 movie_list에 해당하는 영화의 imdbID를 link_list에 추출
+    // movie_list 와 link_list를 10개 출력
+    public static void main(String[] args){
+        try{
+<span class="fc bfc" id="L36" title="All 2 branches covered.">            if (args.length &lt; 3) {</span>
+<span class="fc" id="L37">                System.out.println(&quot;Error. The number of input ​​should be at least 3.&quot;);</span>
+<span class="fc" id="L38">                return;</span>
+            }
+
+<span class="fc" id="L41">            String gender_input = args[0];</span>
+<span class="fc" id="L42">            int age_input = 0;</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">            if (!args[1].isEmpty())</span>
+<span class="fc" id="L44">                age_input = Integer.parseInt(args[1]);</span>
+<span class="fc" id="L45">            String occup_input = args[2];</span>
+<span class="fc" id="L46">            String genre_input = &quot;&quot;;</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">            if (args.length &gt; 3)</span>
+<span class="fc" id="L48">                genre_input = args[3];</span>
+            
+<span class="fc" id="L50">            boolean gender_null = false;</span>
+<span class="fc" id="L51">            boolean age_null = false;</span>
+<span class="fc" id="L52">            boolean occup_null = false;</span>
+<span class="fc" id="L53">            boolean genre_null = false;</span>
+            
+<span class="fc bfc" id="L55" title="All 2 branches covered.">            if (args[0].isEmpty())</span>
+<span class="fc" id="L56">                gender_null = true;</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">            if (args[1].isEmpty())</span>
+<span class="fc" id="L58">                age_null = true;</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">            if (args[2].isEmpty())</span>
+<span class="fc" id="L60">                occup_null = true;</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">            if (args.length &gt; 3) {</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">                if (args[3].isEmpty())</span>
+<span class="fc" id="L63">                    genre_null = true;</span>
+            }
+
+            // gender_input 이 비정상일때
+<span class="fc bfc" id="L67" title="All 2 branches covered.">            if (!genre_null) {</span>
+<span class="pc bpc" id="L68" title="1 of 4 branches missed.">                if (!(gender_input.equalsIgnoreCase(&quot;F&quot;)) &amp;&amp; !(gender_input.equalsIgnoreCase(&quot;M&quot;))) {</span>
+<span class="fc" id="L69">                    System.out.println(&quot;Error. User gender is F or M&quot;);</span>
+<span class="fc" id="L70">                    return;</span>
+                }
+            }
+
+            // age_input 이 비정상일때
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">            if (!age_null) {</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">                if (age_input &lt;= 0) {</span>
+<span class="fc" id="L77">                    System.out.println(&quot;Error. User age cannot be under 0&quot;);</span>
+<span class="fc" id="L78">                    return;</span>
+                }
+            }
+
+            // occup_input이 occup_list에 없는 경우
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            if (!occup_null) {</span>
+<span class="fc" id="L84">                boolean occup_bool = false;</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">                for (String occup: occup_list) {</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">                    if (occup.contains(&quot;/&quot;)) {</span>
+<span class="fc" id="L87">                        String[] occups = occup.split(&quot;/&quot;);</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">                        for (String s: occups) {</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">                            if (occup_input.equalsIgnoreCase(s)) {</span>
+<span class="fc" id="L90">                                occup_bool = true;</span>
+<span class="fc" id="L91">                                break;</span>
+                            }
+                        }
+<span class="fc" id="L94">                    } else {</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">                        if (occup_input.equalsIgnoreCase(occup))</span>
+<span class="fc" id="L96">                            occup_bool = true;</span>
+                    }
+<span class="fc bfc" id="L98" title="All 2 branches covered.">                    if (occup_bool)</span>
+<span class="fc" id="L99">                        break;</span>
+                }
+<span class="fc bfc" id="L101" title="All 2 branches covered.">                if (!occup_bool) {</span>
+<span class="fc" id="L102">                    System.out.println(&quot;Error. The occupation does not exist&quot;);</span>
+<span class="fc" id="L103">                    return;</span>
+                }
+            }
+
+            // genre_input이 genre_list에 없는 경우
+<span class="fc bfc" id="L108" title="All 2 branches covered.">            if (!genre_null) {</span>
+<span class="fc" id="L109">                boolean genre_bool = false;</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">                if (genre_input.contains(&quot;|&quot;)) {</span>
+<span class="fc" id="L111">                    String[] input_genre_list = genre_input.split(&quot;\\|&quot;);</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">                    for (String input: input_genre_list) {</span>
+<span class="fc" id="L113">                        genre_bool = false;</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">                        for (String genre: movie_genre_list) {</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">                            if (input.equalsIgnoreCase(genre)) {</span>
+<span class="fc" id="L116">                                genre_bool = true;</span>
+<span class="fc" id="L117">                                break;</span>
+                            }
+                        }
+                    }
+<span class="fc" id="L121">                } else {</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">                    for (String genre: movie_genre_list) {</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">                        if (genre_input.equalsIgnoreCase(genre)) {</span>
+<span class="fc" id="L124">                            genre_bool = true;</span>
+<span class="fc" id="L125">                            break;</span>
+                        }
+                    }
+                }
+<span class="fc bfc" id="L129" title="All 2 branches covered.">                if (!genre_bool) {</span>
+<span class="fc" id="L130">                    System.out.println(&quot;Error. The movie genre does not exist&quot;);</span>
+<span class="fc" id="L131">                    return;</span>
+                }
+            }
+
+            //파일 객체 생성
+<span class="fc" id="L136">            File moviefile = new File(&quot;/root/project/project2/data/ml-1m/movies.dat&quot;);</span>
+<span class="fc" id="L137">            File ratingfile = new File(&quot;/root/project/project2/data/ml-1m/ratings.dat&quot;);</span>
+<span class="fc" id="L138">            File userfile = new File(&quot;/root/project/project2/data/ml-1m/users.dat&quot;);</span>
+<span class="fc" id="L139">            File linkfile = new File(&quot;/root/project/project2/data/ml-1m/links.dat&quot;);</span>
+            //입력 버퍼 생성
+<span class="fc" id="L141">            BufferedReader moviebuf = new BufferedReader(new FileReader(moviefile));</span>
+<span class="fc" id="L142">            BufferedReader ratingbuf = new BufferedReader(new FileReader(ratingfile));</span>
+<span class="fc" id="L143">            BufferedReader userbuf = new BufferedReader(new FileReader(userfile));</span>
+<span class="fc" id="L144">            BufferedReader linkbuf = new BufferedReader(new FileReader(linkfile));</span>
+
+            // *  1:  &quot;Under 18&quot; * 18:  &quot;18-24&quot; * 25:  &quot;25-34&quot; * 35:  &quot;35-44&quot; * 45:  &quot;45-49&quot; * 50:  &quot;50-55&quot; * 56:  &quot;56+&quot;
+<span class="fc" id="L147">            String age_index = &quot;0&quot;;</span>
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">            if (!args[1].isEmpty()) {</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">                if (age_input &lt; 18) </span>
+<span class="fc" id="L150">                    age_index = &quot;1&quot;;</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">                else if (age_input &lt; 25)</span>
+<span class="fc" id="L152">                    age_index = &quot;18&quot;;</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">                else if (age_input &lt; 35)</span>
+<span class="fc" id="L154">                    age_index = &quot;25&quot;;</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">                else if (age_input &lt; 45)</span>
+<span class="fc" id="L156">                    age_index = &quot;35&quot;;</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">                else if (age_input &lt; 50)</span>
+<span class="fc" id="L158">                    age_index = &quot;45&quot;;</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">                else if (age_input &lt; 56)</span>
+<span class="fc" id="L160">                    age_index = &quot;50&quot;;</span>
+                else
+<span class="fc" id="L162">                    age_index = &quot;56&quot;;</span>
+            }
+<span class="fc" id="L164">            boolean check10 = true;</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">            while (check10) {</span>
+                // users.dat 파일에서 (gender:age:occup)에 해당하는 유저 userIdList에 추가
+<span class="fc" id="L167">                String userline = &quot;&quot;;</span>
+<span class="fc" id="L168">                ArrayList&lt;String&gt; userIdList = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">                while((userline = userbuf.readLine()) != null){</span>
+<span class="fc" id="L170">                    String[] userwords = userline.split(&quot;::&quot;);</span>
+<span class="fc" id="L171">                    String userId = userwords[0];</span>
+<span class="fc" id="L172">                    String userGender = userwords[1];</span>
+<span class="fc" id="L173">                    String userAge = userwords[2];</span>
+<span class="fc" id="L174">                    int userOccup = Integer.parseInt(userwords[3]);</span>
+
+<span class="fc bfc" id="L176" title="All 2 branches covered.">                    if (occup_list[userOccup].contains(&quot;/&quot;)) {</span>
+<span class="fc" id="L177">                        String[] occups = occup_list[userOccup].split(&quot;/&quot;);</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">                        for (String s: occups)</span>
+<span class="pc bpc" id="L179" title="1 of 12 branches missed.">                            if ((s.equalsIgnoreCase(occup_input) || occup_null) &amp;&amp; (userGender.equalsIgnoreCase(gender_input) || gender_null) &amp;&amp; (userAge.equals(age_index) || age_null)){</span>
+<span class="fc" id="L180">                                userIdList.add(userId);</span>
+<span class="fc" id="L181">                                break;</span>
+                            }
+<span class="fc" id="L183">                    } else {</span>
+<span class="pc bpc" id="L184" title="2 of 12 branches missed.">                        if ((occup_list[userOccup].equalsIgnoreCase(occup_input) || occup_null) &amp;&amp; (userGender.equalsIgnoreCase(gender_input) || gender_null) &amp;&amp; (userAge.equals(age_index) || age_null))</span>
+<span class="fc" id="L185">                            userIdList.add(userId);</span>
+                    }
+<span class="fc" id="L187">                }</span>
+
+
+                
+
+                // ratings.dat 파일에서 userIdList에 있는 user들의 rating을 MovieGroup안에 (movieId, rating_sum, ratingNum, rating_avg) 형태로 저장
+<span class="fc" id="L193">                double [][] movieGroup = new double[4000][4];</span>
+<span class="fc" id="L194">                String ratingline = &quot;&quot;;</span>
+<span class="fc" id="L195">                int count = 0;</span>
+<span class="fc" id="L196">                int ratecount = 0;</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">                while((ratingline = ratingbuf.readLine()) != null){</span>
+<span class="fc" id="L198">                    String[] ratingwords = ratingline.split(&quot;::&quot;);</span>
+<span class="fc" id="L199">                    String userId = ratingwords[0];</span>
+<span class="fc" id="L200">                    Integer movieId = Integer.parseInt(ratingwords[1]);</span>
+<span class="fc" id="L201">                    Integer rating = Integer.parseInt(ratingwords[2]);</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">                    for (String ids: userIdList) {</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">                        if (ids.equals(userId)) {</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">                            if (count == 0) {</span>
+<span class="fc" id="L205">                                movieGroup[0][0] = movieId;</span>
+<span class="fc" id="L206">                                movieGroup[0][1] = rating;</span>
+<span class="fc" id="L207">                                movieGroup[0][2] = 1;</span>
+<span class="fc" id="L208">                                movieGroup[0][3] = movieGroup[0][1];</span>
+<span class="fc" id="L209">                                count++;</span>
+<span class="fc" id="L210">                                ratecount++;</span>
+<span class="fc" id="L211">                                break;</span>
+                            } else {
+<span class="pc bpc" id="L213" title="1 of 2 branches missed.">                                for(int i=0 ; i &lt; count ; i++) {</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">                                    if (movieGroup[i][0] == movieId) { // movieGroup안에 movieId와 같은 영화가 이미 있다면</span>
+<span class="fc" id="L215">                                        movieGroup[i][1] += rating;</span>
+<span class="fc" id="L216">                                        movieGroup[i][2] += 1;</span>
+<span class="fc" id="L217">                                        movieGroup[i][3] = movieGroup[i][1] / movieGroup[i][2];</span>
+<span class="fc" id="L218">                                        ratecount++;</span>
+<span class="fc" id="L219">                                        break;</span>
+                                    }
+<span class="fc bfc" id="L221" title="All 2 branches covered.">                                    else if (i == (count-1)){// movieGroup 안에 movie ID와 같은 영화가 없을때</span>
+<span class="fc" id="L222">                                        movieGroup[count][0] = movieId;</span>
+<span class="fc" id="L223">                                        movieGroup[count][1] = rating;</span>
+<span class="fc" id="L224">                                        movieGroup[count][2] = 1;</span>
+<span class="fc" id="L225">                                        movieGroup[count][3] = movieGroup[count][1] / movieGroup[count][2];</span>
+<span class="fc" id="L226">                                        ratecount++;</span>
+<span class="fc" id="L227">                                        count++;</span>
+<span class="fc" id="L228">                                        break;</span>
+                                    }
+                                }
+                            }
+                        }
+<span class="fc" id="L233">                    }</span>
+<span class="fc" id="L234">                }</span>
+
+                // movieGroup의 movie 개수가 10개 이상이 아닐때 - occup_input 을 뺴고 다시 검색
+<span class="fc bfc" id="L237" title="All 2 branches covered.">                if (count &lt; 10) {</span>
+<span class="fc" id="L238">                    occup_input = &quot;&quot;;</span>
+<span class="fc" id="L239">                    occup_null = true;</span>
+<span class="fc" id="L240">                    ratingbuf = new BufferedReader(new FileReader(ratingfile));</span>
+<span class="fc" id="L241">                    userbuf = new BufferedReader(new FileReader(userfile));</span>
+<span class="fc" id="L242">                    continue;</span>
+                }
+<span class="fc" id="L244">                check10 = false;</span>
+                
+                // movieGroup을 rating_avg의 내림차순으로 정렬 -&gt; rating_avg 같다면 rating_num 순으로 정렬
+<span class="fc" id="L247">                Arrays.sort(movieGroup, new Comparator&lt;double[]&gt;(){</span>
+                    public int compare(double[] m1, double[] m2) {
+<span class="fc bfc" id="L249" title="All 2 branches covered.">                        if (m1[3] == m2[3]) {</span>
+<span class="fc" id="L250">                            return Double.compare(m2[2], m1[2]);</span>
+                        }
+                        else
+<span class="fc" id="L253">                            return Double.compare(m2[3], m1[3]);</span>
+                    }
+                });
+
+<span class="fc" id="L257">                String movieline = &quot;&quot;;</span>
+<span class="fc" id="L258">                String [][] movie_list = new String[10][2];</span>
+<span class="fc" id="L259">                int index = 0;</span>
+                // movie_genre가 인자로 들어올 때
+<span class="pc bpc" id="L261" title="1 of 4 branches missed.">                if (args.length &gt; 3 &amp;&amp; !genre_null) {</span>
+                    // movie_genre가 |를 포함할 때
+<span class="fc bfc" id="L263" title="All 2 branches covered.">                    if (genre_input.contains(&quot;|&quot;)) {</span>
+<span class="pc bpc" id="L264" title="1 of 2 branches missed.">                        for (int i = 0; i &lt; count; i++) {</span>
+<span class="fc" id="L265">                            movieline = &quot;&quot;;</span>
+<span class="fc bfc" id="L266" title="All 2 branches covered.">                            if (index &gt;= 10)</span>
+<span class="fc" id="L267">                                break;</span>
+<span class="fc bfc" id="L268" title="All 2 branches covered.">                            while((movieline = moviebuf.readLine()) != null){</span>
+<span class="fc" id="L269">                                boolean flag = false;</span>
+<span class="fc" id="L270">                                boolean flag2 = false;</span>
+<span class="fc" id="L271">                                String[] moviewords = movieline.split(&quot;::&quot;);</span>
+<span class="fc" id="L272">                                Integer movieId = Integer.parseInt(moviewords[0]);</span>
+<span class="fc" id="L273">                                String movieName = moviewords[1];</span>
+<span class="fc" id="L274">                                String moviegenre = moviewords[2];</span>
+<span class="fc" id="L275">                                String[] genres = moviegenre.split(&quot;\\|&quot;); // 특수문자 | 는 앞에 \\가 붙어야 구분가능</span>
+<span class="fc" id="L276">                                String[] input_genre_list = genre_input.split(&quot;\\|&quot;);</span>
+<span class="fc bfc" id="L277" title="All 2 branches covered.">                                for (String input: input_genre_list) {</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">                                    for (String s: genres) {</span>
+<span class="fc bfc" id="L279" title="All 2 branches covered.">                                        if (input.equalsIgnoreCase(s)) {</span>
+<span class="fc bfc" id="L280" title="All 2 branches covered.">                                            if (movieId == (int)movieGroup[i][0]) {</span>
+<span class="fc bfc" id="L281" title="All 2 branches covered.">                                                if (movieGroup[i][2] &gt; ratecount/count) {</span>
+<span class="fc" id="L282">                                                    movie_list[index][0] = Integer.toString(movieId);</span>
+<span class="fc" id="L283">                                                    movie_list[index][1] = movieName;</span>
+<span class="fc" id="L284">                                                    index++;</span>
+<span class="fc" id="L285">                                                    flag = true;</span>
+<span class="fc" id="L286">                                                    flag2 = true;</span>
+<span class="fc" id="L287">                                                    break;</span>
+                                                }
+                                            }   
+                                        }
+                                    }
+<span class="fc bfc" id="L292" title="All 2 branches covered.">                                    if (flag)</span>
+<span class="fc" id="L293">                                        break;</span>
+                                }
+<span class="fc bfc" id="L295" title="All 2 branches covered.">                                if (flag2)</span>
+<span class="fc" id="L296">                                    break;</span>
+<span class="fc" id="L297">                            }</span>
+<span class="fc" id="L298">                            moviebuf = new BufferedReader(new FileReader(moviefile));  </span>
+                        }
+                    } else { // movie_genre가 |를 포함하지 않을 때
+<span class="pc bpc" id="L301" title="1 of 2 branches missed.">                        for (int i = 0; i &lt; count; i++) {</span>
+<span class="fc" id="L302">                            movieline = &quot;&quot;;</span>
+<span class="fc bfc" id="L303" title="All 2 branches covered.">                            if (index &gt;= 10)</span>
+<span class="fc" id="L304">                                break;</span>
+<span class="fc bfc" id="L305" title="All 2 branches covered.">                            while((movieline = moviebuf.readLine()) != null){</span>
+<span class="fc" id="L306">                                boolean flag = false;</span>
+<span class="fc" id="L307">                                String[] moviewords = movieline.split(&quot;::&quot;);</span>
+<span class="fc" id="L308">                                Integer movieId = Integer.parseInt(moviewords[0]);</span>
+<span class="fc" id="L309">                                String movieName = moviewords[1];</span>
+<span class="fc" id="L310">                                String moviegenre = moviewords[2];</span>
+<span class="fc" id="L311">                                String[] genres = moviegenre.split(&quot;\\|&quot;); // 특수문자 | 는 앞에 \\가 붙어야 구분가능</span>
+<span class="fc bfc" id="L312" title="All 2 branches covered.">                                for (String s: genres) {</span>
+<span class="fc bfc" id="L313" title="All 2 branches covered.">                                    if (genre_input.equalsIgnoreCase(s)) {</span>
+<span class="fc bfc" id="L314" title="All 2 branches covered.">                                        if (movieId == (int)movieGroup[i][0]) {</span>
+<span class="fc bfc" id="L315" title="All 2 branches covered.">                                            if (movieGroup[i][2] &gt; ratecount/count) {</span>
+<span class="fc" id="L316">                                                movie_list[index][0] = Integer.toString(movieId);</span>
+<span class="fc" id="L317">                                                movie_list[index][1] = movieName;</span>
+<span class="fc" id="L318">                                                index++;</span>
+<span class="fc" id="L319">                                                flag = true;</span>
+<span class="fc" id="L320">                                                break;</span>
+                                            }
+                                        }
+                                    }
+                                }
+<span class="fc bfc" id="L325" title="All 2 branches covered.">                                if (flag)</span>
+<span class="fc" id="L326">                                    break;</span>
+<span class="fc" id="L327">                            }</span>
+<span class="fc" id="L328">                            moviebuf = new BufferedReader(new FileReader(moviefile));</span>
+                        }
+                    }            
+                } else { // movie_genre 가 인자로 들어오지 않았고, 들어왔어도 &quot;&quot; 일떄
+<span class="pc bpc" id="L332" title="1 of 2 branches missed.">                    for (int i = 0; i &lt; count ; i++) {</span>
+<span class="fc bfc" id="L333" title="All 2 branches covered.">                        if (index &gt;= 10)</span>
+<span class="fc" id="L334">                            break;</span>
+<span class="fc bfc" id="L335" title="All 2 branches covered.">                        if (movieGroup[i][2] &gt; ratecount/count) {</span>
+<span class="fc" id="L336">                            int movieId = (int) movieGroup[i][0];</span>
+<span class="fc" id="L337">                            movie_list[index][0] = Integer.toString(movieId);</span>
+<span class="fc" id="L338">                            index++;</span>
+                        }
+                    }
+<span class="fc bfc" id="L341" title="All 2 branches covered.">                    while((movieline = moviebuf.readLine()) != null){</span>
+<span class="fc" id="L342">                        String[] moviewords = movieline.split(&quot;::&quot;);</span>
+<span class="fc" id="L343">                        Integer movieId = Integer.parseInt(moviewords[0]);</span>
+<span class="fc" id="L344">                        String movieName = moviewords[1];</span>
+<span class="fc bfc" id="L345" title="All 2 branches covered.">                        for (int i=0; i&lt;10; i++) {</span>
+<span class="fc bfc" id="L346" title="All 2 branches covered.">                            if (movieId == Integer.parseInt(movie_list[i][0])) {</span>
+<span class="fc" id="L347">                                movie_list[i][1] = movieName;</span>
+<span class="fc" id="L348">                                break;</span>
+                            }
+                        }
+<span class="fc" id="L351">                    } </span>
+                }
+
+<span class="fc" id="L354">                String linkline = &quot;&quot;;</span>
+<span class="fc" id="L355">                String [] link_list = new String[10];</span>
+<span class="fc bfc" id="L356" title="All 2 branches covered.">                while((linkline = linkbuf.readLine()) != null){</span>
+<span class="fc" id="L357">                    String[] linkwords = linkline.split(&quot;::&quot;);</span>
+<span class="fc" id="L358">                    Integer movieId = Integer.parseInt(linkwords[0]);</span>
+<span class="fc" id="L359">                    String imdbId = linkwords[1];</span>
+<span class="fc bfc" id="L360" title="All 2 branches covered.">                    for (int i=0; i&lt; 10; i++) {</span>
+<span class="fc bfc" id="L361" title="All 2 branches covered.">                        if (movieId == Integer.parseInt(movie_list[i][0])) {</span>
+<span class="fc" id="L362">                            link_list[i] = imdbId;</span>
+<span class="fc" id="L363">                            break;</span>
+                        }
+                    }    
+<span class="fc" id="L366">                }</span>
+
+<span class="fc bfc" id="L368" title="All 2 branches covered.">                for (int i=0; i&lt;10; i++)</span>
+<span class="fc" id="L369">                    System.out.println(movie_list[i][1] + &quot; http://www.imdb.com/title/tt&quot; + link_list[i]); </span>
+<span class="fc" id="L370">            }</span>
+
+<span class="fc" id="L372">            moviebuf.close();</span>
+<span class="fc" id="L373">            ratingbuf.close();</span>
+<span class="fc" id="L374">            userbuf.close();</span>
+<span class="fc" id="L375">            linkbuf.close();</span>
+
+<span class="nc" id="L377">        } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L378">            System.out.println(e);</span>
+<span class="nc" id="L379">        } catch (ArrayIndexOutOfBoundsException e) {</span>
+<span class="nc" id="L380">            System.out.println(e);</span>
+<span class="nc" id="L381">        } catch(IOException e){</span>
+<span class="nc" id="L382">            System.out.println(e);</span>
+<span class="pc" id="L383">        }</span>
+<span class="fc" id="L384">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
