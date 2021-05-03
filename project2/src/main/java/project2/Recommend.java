@@ -177,11 +177,12 @@ public class Recommend {
 
                     if (occup_list[userOccup].contains("/")) {
                         String[] occups = occup_list[userOccup].split("/");
-                        for (String s: occups)
+                        for (String s: occups) {
                             if ((s.equalsIgnoreCase(occup_input) || occup_null) && (userGender.equalsIgnoreCase(gender_input) || gender_null) && (userAge.equals(age_index) || age_null)){
                                 userIdList.add(userId);
                                 break;
                             }
+                        }
                     } else {
                         if ((occup_list[userOccup].equalsIgnoreCase(occup_input) || occup_null) && (userGender.equalsIgnoreCase(gender_input) || gender_null) && (userAge.equals(age_index) || age_null))
                             userIdList.add(userId);
