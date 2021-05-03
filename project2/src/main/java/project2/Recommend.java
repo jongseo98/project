@@ -64,7 +64,7 @@ public class Recommend {
             }
 
             // gender_input 이 비정상일때
-            if (!genre_null) {
+            if (!gender_null) {
                 if (!(gender_input.equalsIgnoreCase("F")) && !(gender_input.equalsIgnoreCase("M"))) {
                     System.out.println("Error. User gender is F or M");
                     return;
