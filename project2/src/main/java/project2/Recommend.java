@@ -105,30 +105,32 @@ public class Recommend {
             }
 
             // genre_input이 genre_list에 없는 경우
-            if (!genre_null) {
-                boolean genre_bool = false;
-                if (genre_input.contains("|")) {
-                    String[] input_genre_list = genre_input.split("\\|");
-                    for (String input: input_genre_list) {
-                        genre_bool = false;
+            if (arg.length > 3) {
+                if (!genre_null) {
+                    boolean genre_bool = false;
+                    if (genre_input.contains("|")) {
+                        String[] input_genre_list = genre_input.split("\\|");
+                        for (String input: input_genre_list) {
+                            genre_bool = false;
+                            for (String genre: movie_genre_list) {
+                                if (input.equalsIgnoreCase(genre)) {
+                                    genre_bool = true;
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
                         for (String genre: movie_genre_list) {
-                            if (input.equalsIgnoreCase(genre)) {
+                            if (genre_input.equalsIgnoreCase(genre)) {
                                 genre_bool = true;
                                 break;
                             }
                         }
                     }
-                } else {
-                    for (String genre: movie_genre_list) {
-                        if (genre_input.equalsIgnoreCase(genre)) {
-                            genre_bool = true;
-                            break;
-                        }
+                    if (!genre_bool) {
+                        System.out.println("Error. The movie genre does not exist");
+                        return;
                     }
-                }
-                if (!genre_bool) {
-                    System.out.println("Error. The movie genre does not exist");
-                    return;
                 }
             }
 
