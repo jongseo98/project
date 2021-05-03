@@ -6,6 +6,7 @@ Our algorithm gets the argument and finds the user Id group that equals the inpu
 
 ### Criteria of data:
 When user Id group is given, there will be the number of ratings committed by user ID and the number of movies that are rated by user Id group. We divide number of ratings committed(ratecount) by number of movies rated by user group(count), so that we can achieve average number of ratings committed to each movie by user groups. We define data as valid only if the movie has more ratings committed than the number of ratings committed to each movie by user groups.          
+         
 Example) ratecount=1000, count=100 -> ratecount/count=10          
 	Movies with at least 10 rating commits by user ID groups are valid data.            
 	5star average rating with 9 rating commits by user ID group are not recommended.           
@@ -48,6 +49,7 @@ Prints out-> "Error. The occupation does not exist"
 Prints out-> "Error. The movie genre does not exist"          
 6)If you put all inputs are right in form it prints out output as:             
 Input: "" "" "" "Adventure"           
+         
 Output:           
 Raiders of the Lost Ark (1981) http://www.imdb.com/title/tt0082971           
 Star Wars: Episode IV - A New Hope (1977) http://www.imdb.com/title/tt0076759            
@@ -65,6 +67,7 @@ Princess Mononoke, The (Mononoke Hime) (1997) http://www.imdb.com/title/tt011969
 20171229 정우진: Managing algorithms and error handling of program.            
 20171273 황태영: Managing with Branch coverage and Docker.          
 20171084 김태훈: Managing with Branch coverage and maven.               
+***
 These were main parts that we managed and it doesn’t mean that we worked only for each part.            
 Every participated actively during the whole milestone.            
 In this milestone, we used Live Share in Visual Studio to code java code concurrently between teammates since we all participated on making codes.            
