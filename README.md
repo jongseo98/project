@@ -1,9 +1,10 @@
-1.Project2 Algorithm
+# 1.Project2 Algorithm
+
 In project2, we get 3 to 4 arguments as an input. 
 First argument is gender, second is age, third is occupation, fourth is genre.
 Our algorithm gets the argument and finds the user Id group that equals the input. After finding user Id group, we sum up all the movies and ratings that are rated by the user Id. After summing up the data, we validate whether the data meet the criteria. 
 
-Criteria of data:
+### Criteria of data:
 When user Id group is given, there will be the number of ratings committed by user ID and the number of movies that are rated by user Id group. We divide number of ratings committed(ratecount) by number of movies rated by user group(count), so that we can achieve average number of ratings committed to each movie by user groups. We define data as valid only if the movie has more ratings committed than the number of ratings committed to each movie by user groups. 
 Example) ratecount=1000, count=100 -> ratecount/count=10
 	Movies with at least 10 rating commits by user ID groups are valid data.
@@ -17,10 +18,11 @@ We interpreted “relevance” as the validity of data which is meaningful. So, 
 Also, for ‘similarity’, we thought that Gender(>age>occupation) has more priority in similarity. Therefore, we deleted occupation first when we had less than 10 movies to recommend.
 
 
-2. How to run a program
+# 2. How to run a program
 Before you begin, java11 and maven are must installed in your system.
 You can run with the following commands.
----------------------------------------------------------------------
+
+```
 #!/bin/bash
 git clone https://github.com/20171119/project.git
 cd project2
@@ -29,10 +31,10 @@ mvn install
 mvn assembly:assembly
 mvn jacoco:prepare-agent test jacoco:report
 java -cp target/cse364-project-1.0-SNAPSHOT-jar-with-dependencies.jar project2.Recommend "F" "25" "Gradstudent" "Action|Comedy"
---------------------------------------------------------------------------
+```
 
 
-3. Input and Output Handling
+# 3. Input and Output Handling
 Our program supports such inputs and outputs:
 1) If you input less than 3 arguments, ex) “F” “ ”
 Prints out-> "Error. The number of input should be at least 3."
@@ -58,7 +60,7 @@ African Queen, The (1951) http://www.imdb.com/title/tt0043265
 Wizard of Oz, The (1939) http://www.imdb.com/title/tt0032138
 Princess Mononoke, The (Mononoke Hime) (1997) http://www.imdb.com/title/tt0119698
 
-4. Role of each member
+# 4. Role of each member
 20171119 박종서: Overall management handling Github and java codes.
 20171229 정우진: Managing algorithms and error handling of program. 
 20171273 황태영: Managing with Branch coverage and Docker.
