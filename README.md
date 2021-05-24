@@ -9,4 +9,19 @@ Within valid movies we recommend movies in order that has higher average rating.
 
 As explained in milestone default of limit is 10.
 For particular case with high limits, we have one more algorithm, for example, “Force of Evil (1948)” “limit:70”. “Force of Evil (1948)” ‘s genre is “Film-Noir” but only has 44 in genre data base which is lower than limit 70. In this case, we first recommend film that has genre of “Film-Noir” first and then recommend any other films with any other genres in order that has higher average rating.  In this case, we print out all “Film-Noir” movies even the movies do not have more commitments than average. However, we only recommend movies that has more commitments than average for the movies that are not “Film-Noir”.
+
+#### In detail    
+###### A. Input: “Toy Story (1995)” "limit:20"    
+     1. (Has at least one of Animation, Children's, Comedy),(Has more commitments than average),(Highest average rating among valid movies)    
+     ...    
+     19.(Has at least one of Animation, Children's, Comedy),(Has more commitments than average),(19th Highest average rating among valid movies)    
+     20.(Has at least one of Animation, Children's, Comedy),(Has more commitments than average),(20th Highest average rating among valid movies)    
      
+###### B. Input: “Force of Evil (1948)” “limit:70”    
+     1. (Has genre Film-Noir),(Highest average rating)
+     ...
+     44.(Has genre Film-Noir),(44th Highest average rating)    
+     45.(Has more commitments than average)(1st Highest average rating among valid movies)    
+     46.(Has more commitments than average)(2nd Highest average rating among valid movies)    
+     ...    
+     70.(Has more commitments than average)(36th Highest average rating among valid movies)    
