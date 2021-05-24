@@ -36,10 +36,6 @@ public class Recommendation {
 
     private ArrayList<Movie> result = new ArrayList<Movie>();
 
-    public ArrayList<Movie> getResult() {
-        return result;
-    }
-
     public Recommendation(String title, int limit) {
         this.title = title;
         this.limit = limit;
@@ -432,8 +428,6 @@ public class Recommendation {
                                                 flag = true;
                                                 break;
                                             } 
-                                            if (flag)
-                                                break;
                                         }
                                         moviebuf = new BufferedReader(new FileReader(moviefile));
                                     }
@@ -501,8 +495,6 @@ public class Recommendation {
                                                 flag = true;
                                                 break;
                                             } 
-                                            if (flag)
-                                                break;
                                         }
                                         moviebuf = new BufferedReader(new FileReader(moviefile));
                                     }
@@ -533,8 +525,6 @@ public class Recommendation {
                                 flag = true;
                                 break;
                             }
-                            if (flag)
-                                break;
                         }
                         moviebuf = new BufferedReader(new FileReader(moviefile));
                     } 
