@@ -366,7 +366,7 @@ public class Recommendation {
                             if (index >= limit)
                                 break;
                             if (limit_null) {
-                                if (movieGroup[i][2] > ratecount/count) 
+                                if (movieGroup[i][2] < ratecount/count) 
                                     continue;
                             }
                             while((movieline = moviebuf.readLine()) != null){
@@ -411,10 +411,10 @@ public class Recommendation {
                                             break;
                                         if ((int) movieGroup[j][4] != 0)
                                             continue;
-                                        if (limit_null) {
-                                            if (movieGroup[i][2] < ratecount/count)
-                                                continue;
-                                        }
+                                        // if (limit_null) {
+                                        //     if (movieGroup[i][2] < ratecount/count)
+                                        //         continue;
+                                        // }
                                         while((movieline = moviebuf.readLine()) != null) {
                                             boolean flag = false;
                                             String[] moviewords = movieline.split("::");

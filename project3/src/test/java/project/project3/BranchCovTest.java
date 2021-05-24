@@ -43,7 +43,7 @@ public class BranchCovTest {
 
     @Test
 	public void getmainTest4() {
-        Recommendation app = new Recommendation("M", "7", "farmer", "Film-Noir|Romance|Thriller");
+        Recommendation app = new Recommendation("M", "48", "farmer", "Film-Noir|Romance|Thriller");
         app.getMovielist();
         assertNotNull(app);
 	}
@@ -183,4 +183,12 @@ public class BranchCovTest {
         app.recommendations2(recommend2);
         assertNotNull(app);
 	}
+
+    @Test
+	public void getmainTest25() {
+        Recommendation app = new Recommendation("M", "52", "farmer", "Film-Noir|Romance|Thriller");
+        app.getMovielist();
+        assertNotNull(app);
+	}
+
 }
