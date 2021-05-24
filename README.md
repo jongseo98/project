@@ -21,7 +21,7 @@ For particular case with high limits, we have one more algorithm, for example, â
      1. (Has genre Film-Noir),(Highest average rating)
      ...
      44.(Has genre Film-Noir),(44th Highest average rating)    
-     45.(Has more commitments than average)(1st Highest average rating among valid movies)    
-     46.(Has more commitments than average)(2nd Highest average rating among valid movies)    
+     45.(Has more commitments than average),(1st Highest average rating among valid movies)    
+     46.(Has more commitments than average),(2nd Highest average rating among valid movies)    
      ...    
-     70.(Has more commitments than average)(36th Highest average rating among valid movies)    
+     70.(Has more commitments than average),(36th Highest average rating among valid movies)    
