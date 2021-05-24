@@ -1,4 +1,4 @@
-package main.java.project.project3;
+package project.project3;
 
 import org.junit.jupiter.api.Test;
 // import org.junit.Test;
