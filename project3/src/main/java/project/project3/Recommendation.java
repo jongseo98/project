@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-// import java.util.Scanner;
-// import java.util.Arrays;
 
 public class Recommendation {
 
@@ -89,16 +87,6 @@ public class Recommendation {
     	return s;
 	}
 
-    // private static String [][] movie_list = new String[limit][3];
-    // private static String [] link_list = new String[limit];
-
-    // gender:age:occup => user.dat 파일에서 일치하는 user 를 userID list에 추가
-    // rating.dat 파일에서 해당 user가 쓴 평점을 통해 movieGroup에 (movieId, rating_sum, rating_num, rating_avg) 추가
-    // movieGroup을 rating_avg 순으로 정렬, 같다면 rating_num 순으로 내림차순 정렬 
-    // 만약 genre도 input 있을때, movieGroup 안에 있는 영화중 해당 장르에 속한 영화
-    // genre input 없을때,  movieGroup 안에 있는 영화중 rating_num > count/rating_count 를 넘은 영화를 추출해서 movie_list 에 (movieId, movieName)으로 저장
-    // links.dat 파일에서 movie_list에 해당하는 영화의 imdbID를 link_list에 추출
-    // movie_list 와 link_list를 10개 출력
     public void getMovielist() {
         try{
             err = false;
@@ -141,21 +129,19 @@ public class Recommendation {
 
             // title 이랑 limit 들어올 때
             if (!limit_null) {
-                System.out.println(title);
                 genre_null = false;
                 String moviedat_line = "";
                 while((moviedat_line = moviebuf.readLine()) != null){
                     String[] moviewords = moviedat_line.split("::");
                     String movieName = moviewords[1];
                     titleId =Integer.parseInt(moviewords[0]);//w
-                    // System.out.println(movieName);
                     if (title.equalsIgnoreCase(movieName)) {
                         genre = moviewords[2];
                         break;
                     }
                 }
-                System.out.println(genre);
-                System.out.println(limit);
+                // System.out.println(genre);
+                // System.out.println(limit);
                 moviebuf = new BufferedReader(new FileReader(moviefile));
             } 
             // gender 이 비정상일때
@@ -204,7 +190,6 @@ public class Recommendation {
 
             // genre이 genre_list에 없는 경우
             if (!genre_null) {
-                System.out.println(genre);
                 boolean genre_bool = false;
                 if (genre.contains("|")) {
                     String[] input_genre_list = genre.split("\\|");
@@ -361,10 +346,10 @@ public class Recommendation {
                             movieline = "";
                             if (index >= limit)
                                 break;
-                            if (limit_null) {
-                                if (movieGroup[i][2] < ratecount/count) 
-                                    continue;
-                            }
+                            // if (limit_null) {
+                            //     if (movieGroup[i][2] < ratecount/count) 
+                            //         continue;
+                            // }
                             while((movieline = moviebuf.readLine()) != null){
                                 boolean flag = false;
                                 boolean flag2 = false;
@@ -407,12 +392,7 @@ public class Recommendation {
                                             break;
                                         if ((int) movieGroup[j][4] != 0)
                                             continue;
-                                        // if (limit_null) {
-                                        //     if (movieGroup[i][2] < ratecount/count)
-                                        //         continue;
-                                        // }
                                         while((movieline = moviebuf.readLine()) != null) {
-                                            boolean flag = false;
                                             String[] moviewords = movieline.split("::");
                                             Integer movieId = Integer.parseInt(moviewords[0]);
                                             String movieName = moviewords[1];
@@ -425,7 +405,6 @@ public class Recommendation {
                                                 movie_list[index][2] = moviegenre;
                                                 movieGroup[j][4] = 1;
                                                 index++;
-                                                flag = true;
                                                 break;
                                             } 
                                         }
@@ -439,10 +418,10 @@ public class Recommendation {
                             movieline = "";
                             if (index >= limit)
                                 break;
-                            if (limit_null) {
-                                if (movieGroup[i][2] < ratecount/count)
-                                    continue;
-                            }
+                            // if (limit_null) {
+                            //     if (movieGroup[i][2] < ratecount/count)
+                            //         continue;
+                            // }
                             while((movieline = moviebuf.readLine()) != null){
                                 boolean flag = false;
                                 String[] moviewords = movieline.split("::");
@@ -475,12 +454,9 @@ public class Recommendation {
                                         movieline = "";
                                         if (index >= limit)
                                             break;
-                                        if (movieGroup[j][2] < ratecount/count)
-                                            continue;
                                         if ((int) movieGroup[j][4] != 0)
                                             continue;
                                         while((movieline = moviebuf.readLine()) != null) {
-                                            boolean flag = false;
                                             String[] moviewords = movieline.split("::");
                                             Integer movieId = Integer.parseInt(moviewords[0]);
                                             String movieName = moviewords[1];
@@ -492,7 +468,6 @@ public class Recommendation {
                                                 movie_list[index][2] = moviegenre;
                                                 movieGroup[j][4] = 1;
                                                 index++;
-                                                flag = true;
                                                 break;
                                             } 
                                         }
@@ -507,12 +482,11 @@ public class Recommendation {
                         movieline = "";
                         if (index >= limit)
                             break;
-                        if (limit_null) {
-                            if (movieGroup[i][2] < ratecount/count)
-                                continue;
-                        }
+                        // if (limit_null) {
+                        //     if (movieGroup[i][2] < ratecount/count)
+                        //         continue;
+                        // }
                         while((movieline = moviebuf.readLine()) != null){
-                            boolean flag = false;
                             String[] moviewords = movieline.split("::");
                             Integer movieId = Integer.parseInt(moviewords[0]);
                             String movieName = moviewords[1];
@@ -522,7 +496,6 @@ public class Recommendation {
                                 movie_list[index][1] = movieName;
                                 movie_list[index][2] = moviegenre;
                                 index++;
-                                flag = true;
                                 break;
                             }
                         }
