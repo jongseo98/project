@@ -2,7 +2,7 @@
 
 In milestone3(part2), we get title of movie and limit as input. When we input the title of movie, the movie has its own genre or genres (one or more). Our algorithm recommends movie that has at least one same genre with the input and recommend them in order that has higher weighted ratings.     
 For example, when we input “Toy Story (1995)”, our algorithm first finds “Toy Story” genres which are Animation, Children's, Comedy. After that, it is pretty much similar with milestone2.
-It will find nearly same movies as milestone2 with input “”, “”, “”. “Animation, Children's, Comedy”. The system will output movies in order that has higher weighted ratings. 
+It will find nearly same movies as milestone2 with input “”, “”, “”, “Animation|Children's|Comedy”. The system will output movies in order that has higher weighted ratings. 
 
 As explained in milestone, default of limit is 10.    
 For particular case with high limits, we have one more algorithm, for example, “Force of Evil (1948)” “limit:70”. “Force of Evil (1948)” ‘s genre is “Film-Noir” but only has 44 movies in genre data base which is lower than limit 70. In this case, we first recommend film that has genre of “Film-Noir” first in order that has higher weighted rating and then recommend any other films with any other genres in order that has higher weighted rating.
