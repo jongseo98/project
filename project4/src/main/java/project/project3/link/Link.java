@@ -8,15 +8,15 @@ import org.springframework.data.annotation.Id;
 public class Link {
 
     @Id
-    private String id;
+    private String linkId;
 	private String imdbId;
 
-    public String getId() {
-        return id;
+    public String getLinkId() {
+        return linkId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setLinkId(String linkId) {
+        this.linkId = linkId;
     }
 
 	public String getImdbId() {

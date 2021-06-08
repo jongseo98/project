@@ -71,11 +71,11 @@ public class RecommendController {
 	}
 
 	
-	// @RequestMapping(value = "/links/{linkId}", method = RequestMethod.GET)
-	// public Link getLink(@PathVariable String linkId) {
-	// 	LOG.info("Getting link with ID: {}.", linkId);
-	// 	return linkRepository.findById(linkId);
-	// }
+	@RequestMapping(value = "/links/{linkId}", method = RequestMethod.GET)
+	public Link getLink(@PathVariable String linkId) {
+		LOG.info("Getting link with ID: {}.", linkId);
+		return linkRepository.findById(linkId).orElse(null);
+	}
 
 	
 	@RequestMapping(value = "/links/create", method = RequestMethod.POST)
@@ -91,11 +91,11 @@ public class RecommendController {
 	}
 
 	
-	// @RequestMapping(value = "/movies/{movieId}", method = RequestMethod.GET)
-	// public Movie getMovie(@PathVariable String movieId) {
-	// 	LOG.info("Getting movie with ID: {}.", movieId);
-	// 	return movieRepository.findOne(movieId);
-	// }
+	@RequestMapping(value = "/movies/{movieId}", method = RequestMethod.GET)
+	public Movie getMovie(@PathVariable String movieId) {
+		LOG.info("Getting movie with ID: {}.", movieId);
+		return movieRepository.findById(movieId).orElse(null);
+	}
 
 	
 	@RequestMapping(value = "/movies/create", method = RequestMethod.POST)
@@ -111,11 +111,11 @@ public class RecommendController {
 	}
 
 	
-	// @RequestMapping(value = "/movie_posters/{movie_posterId}", method = RequestMethod.GET)
-	// public MoviePoster getMovie_poster(@PathVariable String movie_posterId) {
-	// 	LOG.info("Getting movie_poster with ID: {}.", movie_posterId);
-	// 	return movie_posterRepository.findOne(movie_posterId);
-	// }
+	@RequestMapping(value = "/movie_posters/{movie_posterId}", method = RequestMethod.GET)
+	public MoviePoster getMoviePoster(@PathVariable String movie_posterId) {
+		LOG.info("Getting movie_poster with ID: {}.", movie_posterId);
+		return movieposterRepository.findById(movie_posterId).orElse(null);
+	}
 
 	
 	@RequestMapping(value = "/movie_posters/create", method = RequestMethod.POST)
@@ -132,11 +132,11 @@ public class RecommendController {
 	}
 
 	
-	// @RequestMapping(value = "/ratings/{ratingId}", method = RequestMethod.GET)
-	// public Rating getrating(@PathVariable String ratingId) {
-	// 	LOG.info("Getting rating with ID: {}.", ratingId);
-	// 	return ratingRepository.findOne(ratingId);
-	// }
+	@RequestMapping(value = "/ratings/{ratingId}", method = RequestMethod.GET)
+	public Rating getrating(@PathVariable String ratingId) {
+		LOG.info("Getting rating with ID: {}.", ratingId);
+		return ratingRepository.findById(ratingId).orElse(null);
+	}
 
 	
 	@RequestMapping(value = "/ratings/create", method = RequestMethod.POST)
@@ -152,11 +152,11 @@ public class RecommendController {
 	}
 
 	
-	// @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
-	// public User getUser(@PathVariable String userId) {
-	// 	LOG.info("Getting User with ID: {}.", userId);
-	// 	return userRepository.findOne(userId);
-	// }
+	@RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
+	public User getUser(@PathVariable String userId) {
+		LOG.info("Getting User with ID: {}.", userId);
+		return userRepository.findById(userId).orElse(null);
+	}
 
 	
 	@RequestMapping(value = "/users/create", method = RequestMethod.POST)

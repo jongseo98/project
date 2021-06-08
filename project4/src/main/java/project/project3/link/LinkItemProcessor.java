@@ -16,7 +16,7 @@ public class LinkItemProcessor implements ItemProcessor<LinkDetail, Link> {
         log.info("processing Link data.....{}", item);
 
         Link transformedLink = new Link();
-        transformedLink.setId(item.getId());
+        transformedLink.setLinkId(item.getLinkId());
         transformedLink.setImdbId(item.getImdbId());
         return transformedLink;
     }
