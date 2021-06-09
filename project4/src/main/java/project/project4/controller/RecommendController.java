@@ -24,8 +24,8 @@ import project.project4.rating.RatingRepository;
 import project.project4.rating.Rating;
 import project.project4.user.UserRepository;
 import project.project4.user.User;
-import project.project4.movie_rating.MovieRating;
-import project.project4.movie_rating.MovieRatingRepository;
+import project.project4.result.Result;
+import project.project4.result.ResultRepository;
 
 
 
@@ -39,22 +39,23 @@ public class RecommendController {
 	private final MoviePosterRepository movieposterRepository;
 	private final RatingRepository ratingRepository;
 	private final UserRepository userRepository;
-	private final MovieRatingRepository movieRatingRepository;
+	private final ResultRepository resultRepository;
 
 	public RecommendController(LinkRepository linkRepository, MovieRepository movieRepository, MoviePosterRepository movieposterRepository, 
-		RatingRepository ratingRepository, UserRepository userRepository, MovieRatingRepository movieRatingRepository) {
+		RatingRepository ratingRepository, UserRepository userRepository, ResultRepository resultRepository) {
 		this.linkRepository = linkRepository;
 		this.movieRepository = movieRepository;
 		this.movieposterRepository = movieposterRepository;
 		this.ratingRepository = ratingRepository;
 		this.userRepository = userRepository;
-		this.movieRatingRepository = movieRatingRepository;
+		this.resultRepository = resultRepository;
 	}
 
 	@GetMapping("/users/recommendations")
     public String recommendations(@RequestBody RecommendArgument newRecommendArgument) {
 		Recommendation recommend = new Recommendation(newRecommendArgument.getGender(), newRecommendArgument.getAge(), newRecommendArgument.getOccupation(), newRecommendArgument.getGenres(), 
-			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository, movieRatingRepository);
+			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository, resultRepository);
+		resultRepository.deleteAll();
 		recommend.getMovielist();
 		String s = recommend.toString();
 		return s;
@@ -65,7 +66,8 @@ public class RecommendController {
 		if (newRecommendArgument2.getLimit() == 0)
 			newRecommendArgument2.setLimit();
 		Recommendation recommend2 = new Recommendation(newRecommendArgument2.getTitle(), newRecommendArgument2.getLimit(),
-			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository, movieRatingRepository);
+			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository, resultRepository);
+		resultRepository.deleteAll();
 		recommend2.getMovielist();
 		String s = recommend2.toString();
 		return s;

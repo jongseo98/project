@@ -20,8 +20,8 @@ import project.project4.rating.RatingRepository;
 import project.project4.rating.Rating;
 import project.project4.user.UserRepository;
 import project.project4.user.User;
-import project.project4.movie_rating.MovieRating;
-import project.project4.movie_rating.MovieRatingRepository;
+import project.project4.result.Result;
+import project.project4.result.ResultRepository;
 
 
 public class Recommendation {
@@ -57,10 +57,10 @@ public class Recommendation {
 	private final MoviePosterRepository movieposterRepository;
 	private final RatingRepository ratingRepository;
 	private final UserRepository userRepository;
-    private final MovieRatingRepository movieRatingRepository;
+    private final ResultRepository resultRepository;
 
     public Recommendation(String title, int limit, LinkRepository linkRepository, MovieRepository movieRepository, MoviePosterRepository movieposterRepository, 
-		RatingRepository ratingRepository, UserRepository userRepository, MovieRatingRepository movieRatingRepository) {
+		RatingRepository ratingRepository, UserRepository userRepository, ResultRepository resultRepository) {
         this.title = title;
         this.limit = limit;
         this.gender = "";
@@ -75,11 +75,11 @@ public class Recommendation {
 		this.movieposterRepository = movieposterRepository;
 		this.ratingRepository = ratingRepository;
 		this.userRepository = userRepository;
-        this.movieRatingRepository = movieRatingRepository;
+        this.resultRepository = resultRepository;
     }
 
     public Recommendation(String gender, String age, String occupation, String genre, LinkRepository linkRepository, MovieRepository movieRepository, 
-        MoviePosterRepository movieposterRepository, RatingRepository ratingRepository, UserRepository userRepository, MovieRatingRepository movieRatingRepository) {
+        MoviePosterRepository movieposterRepository, RatingRepository ratingRepository, UserRepository userRepository, ResultRepository resultRepository) {
         this.gender = gender;
         if (age.equals(""))
             this.age = 0;
@@ -97,7 +97,7 @@ public class Recommendation {
 		this.movieposterRepository = movieposterRepository;
 		this.ratingRepository = ratingRepository;
 		this.userRepository = userRepository;
-        this.movieRatingRepository = movieRatingRepository;
+        this.resultRepository = resultRepository;
     }
 
     @Override
@@ -547,6 +547,67 @@ public class Recommendation {
                     }
                 });
 
+                int index1 = 0;
+                if (!genre_null) {
+                    if (genre.contains("|")) {
+                        for (int i = 0; i < count1; i++) {
+                            if (index1 >= limit)
+                                break;
+                            // if (limit_null) {
+                            //     if (movieGroup[i][2] < ratecount/count) 
+                            //         continue;
+                            // }
+                            while((movieline = moviebuf.readLine()) != null){
+                                boolean flag = false;
+                                boolean flag2 = false;
+                                String[] moviewords = movieline.split("::");
+                                Integer movieId = Integer.parseInt(moviewords[0]);
+                                String movieName = moviewords[1];
+                                String moviegenre = moviewords[2];
+                                String[] genres_list = moviegenre.split("\\|"); // 특수문자 | 는 앞에 \\가 붙어야 구분가능
+                                String[] input_genre_list = genre.split("\\|");
+                                for (String input: input_genre_list) {
+                                    for (String s: genres_list) {
+                                        if (input.equalsIgnoreCase(s)) {
+                                            if (movieId == (int)movieGroup[i][0]) {
+                                                movie_list[index1][0] = Integer.toString(movieId);
+                                                movie_list[index1][1] = movieName;
+                                                movie_list[index1][2] = moviegenre;
+                                                movieGroup[i][4] = 1;
+                                                index1++;
+                                                flag = true;
+                                                flag2 = true;
+                                                break;
+                                                
+                                            } 
+                                        }
+                                    }
+                                    if (flag)
+                                        break;
+                                }
+                                if (flag2)
+                                    break;
+                            }
+                } else {
+                    for (int i=0; i < limit; i++) {
+                        int id = (int)movieGroup[i][0];
+                        String movieId = Integer.toString(id);
+                        System.out.println("movieId: " + movieId);
+                        Movie movie = movieRepository.findById(movieId).get();
+                        Result result = new Result();
+                        result.setTitle(movie.getTitle());
+                        result.setGenre(movie.getGenre());
+                        
+                        resultRepository.save(result);
+                    }
+                    List<Result> resultList = resultRepository.findAll();
+                    // for (Result r: resultList) {
+                    //     System.out.println("title: " + r.getTitle());
+                    //     System.out.println("gerne: " + r.getGenre());
+                    //     System.out.println("-----------");
+                    // }
+                }
+            
                 String movieline = "";
                 int index = 0;
                 // movie_genre가 인자로 들어올 때
