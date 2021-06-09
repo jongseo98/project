@@ -21,6 +21,8 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
+    - name: Set location to project4
+      run: cd project4
     - name: Build and test
       run: |
         mvn spring-boot:run
