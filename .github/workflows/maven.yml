@@ -6,17 +6,15 @@ name: Java CI with Maven
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'project/project4/*'
   pull_request:
     branches: [ main ]
-    paths:
-      - 'project/project4/*'
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./project4
 
     steps:
     - uses: actions/checkout@v2
@@ -25,11 +23,8 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
-    - name: Set location to project4
-      run: cd project4
-    - name: Check location
-      run: pwd
     - name: Build and test
       run: |
         mvn spring-boot:run
         mvn test
+      working-directory: ${{ env.working-directory }}
