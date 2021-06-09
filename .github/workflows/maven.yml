@@ -21,6 +21,8 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
+    - name: Check location
+      run: pwd
     - name: Set location to project4
       run: cd project4
     - name: Build and test
