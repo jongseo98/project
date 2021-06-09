@@ -365,7 +365,6 @@ public class Recommendation {
                 // }
 
                 ArrayList<String> userIdList = new ArrayList<String>();
-                
                 while((userline = userbuf.readLine()) != null){
                     String[] userwords = userline.split("::");
                     String userId = userwords[0];
@@ -390,7 +389,21 @@ public class Recommendation {
                 // System.out.println("user length: " + userIdList.size());
 
                 // ratings.dat 파일에서 userIdList에 있는 user들의 rating을 MovieGroup안에 (movieId, rating_sum, ratingNum, rating_avg, flag) 형태로 저장
-                double [][] movieGroup = new double[4000][5];
+                //  List<Rating> ratingTest
+                for (User user: userTest) {
+                    List<Rating> ratingTest = ratingRepository.findByUserId("1");
+                    for (Rating r: ratingTest) {
+                        System.out.println("userId: " + r.getUserId());
+                        System.out.println("MovieId: " + r.getMovieId());
+                        System.out.println("--------------");
+                    }
+                }
+                // ratingtest = ratingRepository.findByUserId("1").get();
+                // System.out.println("userId: " + ratingtest.getUserId());
+                // System.out.println("MovieId: " + ratingtest.getMovieId());
+                
+                // List<Rating> ratingTest = ratingRepository.findById(ratingId).orElse(null);
+                double [][] movieGroup = new double[4000][6];
                 String ratingline = "";
                 int count = 0;
                 int ratecount = 0;
@@ -449,15 +462,25 @@ public class Recommendation {
                     }
                 }
                 check = false;
-                
-                // movieGroup을 rating_avg의 내림차순으로 정렬 -> rating_avg 같다면 rating_num 순으로 정렬
+
+                // (movieId, rating_sum, ratingNum, rating_avg, flag, sort_arg)
+                double c=0;
+                for (int i=0; i<count; i++) {
+                    c += movieGroup[i][3];
+                }
+                c=c/count;
+        
+                for (int i=0; i<count; i++) {
+                    movieGroup[i][5] = (movieGroup[i][1])/(movieGroup[i][2]+ratecount/count)+(ratecount*c)/(count*(movieGroup[i][2]+ratecount/count));
+                }
+
                 Arrays.sort(movieGroup, new Comparator<double[]>(){
                     public int compare(double[] m1, double[] m2) {
-                        if (m1[3] == m2[3]) {
-                            return Double.compare(m2[2], m1[2]);
+                        if (m1[5] == m2[5]) {
+                            return Double.compare(m2[3], m1[3]);
                         }
                         else {
-                            return Double.compare(m2[3], m1[3]);
+                            return Double.compare(m2[5], m1[5]);
                         }
                     }
                 });
@@ -472,10 +495,10 @@ public class Recommendation {
                             movieline = "";
                             if (index >= limit)
                                 break;
-                            if (limit_null) {
-                                if (movieGroup[i][2] > ratecount/count) 
-                                    continue;
-                            }
+                            // if (limit_null) {
+                            //     if (movieGroup[i][2] < ratecount/count) 
+                            //         continue;
+                            // }
                             while((movieline = moviebuf.readLine()) != null){
                                 boolean flag = false;
                                 boolean flag2 = false;
@@ -518,12 +541,7 @@ public class Recommendation {
                                             break;
                                         if ((int) movieGroup[j][4] != 0)
                                             continue;
-                                        if (limit_null) {
-                                            if (movieGroup[i][2] < ratecount/count)
-                                                continue;
-                                        }
                                         while((movieline = moviebuf.readLine()) != null) {
-                                            boolean flag = false;
                                             String[] moviewords = movieline.split("::");
                                             Integer movieId = Integer.parseInt(moviewords[0]);
                                             String movieName = moviewords[1];
@@ -536,11 +554,8 @@ public class Recommendation {
                                                 movie_list[index][2] = moviegenre;
                                                 movieGroup[j][4] = 1;
                                                 index++;
-                                                flag = true;
                                                 break;
                                             } 
-                                            if (flag)
-                                                break;
                                         }
                                         moviebuf = new BufferedReader(new FileReader(moviefile));
                                     }
@@ -552,10 +567,10 @@ public class Recommendation {
                             movieline = "";
                             if (index >= limit)
                                 break;
-                            if (limit_null) {
-                                if (movieGroup[i][2] < ratecount/count)
-                                    continue;
-                            }
+                            // if (limit_null) {
+                            //     if (movieGroup[i][2] < ratecount/count)
+                            //         continue;
+                            // }
                             while((movieline = moviebuf.readLine()) != null){
                                 boolean flag = false;
                                 String[] moviewords = movieline.split("::");
@@ -588,12 +603,9 @@ public class Recommendation {
                                         movieline = "";
                                         if (index >= limit)
                                             break;
-                                        if (movieGroup[j][2] < ratecount/count)
-                                            continue;
                                         if ((int) movieGroup[j][4] != 0)
                                             continue;
                                         while((movieline = moviebuf.readLine()) != null) {
-                                            boolean flag = false;
                                             String[] moviewords = movieline.split("::");
                                             Integer movieId = Integer.parseInt(moviewords[0]);
                                             String movieName = moviewords[1];
@@ -605,11 +617,8 @@ public class Recommendation {
                                                 movie_list[index][2] = moviegenre;
                                                 movieGroup[j][4] = 1;
                                                 index++;
-                                                flag = true;
                                                 break;
                                             } 
-                                            if (flag)
-                                                break;
                                         }
                                         moviebuf = new BufferedReader(new FileReader(moviefile));
                                     }
@@ -622,12 +631,11 @@ public class Recommendation {
                         movieline = "";
                         if (index >= limit)
                             break;
-                        if (limit_null) {
-                            if (movieGroup[i][2] < ratecount/count)
-                                continue;
-                        }
+                        // if (limit_null) {
+                        //     if (movieGroup[i][2] < ratecount/count)
+                        //         continue;
+                        // }
                         while((movieline = moviebuf.readLine()) != null){
-                            boolean flag = false;
                             String[] moviewords = movieline.split("::");
                             Integer movieId = Integer.parseInt(moviewords[0]);
                             String movieName = moviewords[1];
@@ -637,11 +645,8 @@ public class Recommendation {
                                 movie_list[index][1] = movieName;
                                 movie_list[index][2] = moviegenre;
                                 index++;
-                                flag = true;
                                 break;
                             }
-                            if (flag)
-                                break;
                         }
                         moviebuf = new BufferedReader(new FileReader(moviefile));
                     } 
