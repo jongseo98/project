@@ -24,6 +24,8 @@ import project.project4.rating.RatingRepository;
 import project.project4.rating.Rating;
 import project.project4.user.UserRepository;
 import project.project4.user.User;
+import project.project4.movie_rating.MovieRating;
+import project.project4.movie_rating.MovieRatingRepository;
 
 
 
@@ -37,20 +39,22 @@ public class RecommendController {
 	private final MoviePosterRepository movieposterRepository;
 	private final RatingRepository ratingRepository;
 	private final UserRepository userRepository;
+	private final MovieRatingRepository movieRatingRepository;
 
 	public RecommendController(LinkRepository linkRepository, MovieRepository movieRepository, MoviePosterRepository movieposterRepository, 
-		RatingRepository ratingRepository, UserRepository userRepository) {
+		RatingRepository ratingRepository, UserRepository userRepository, MovieRatingRepository movieRatingRepository) {
 		this.linkRepository = linkRepository;
 		this.movieRepository = movieRepository;
 		this.movieposterRepository = movieposterRepository;
 		this.ratingRepository = ratingRepository;
 		this.userRepository = userRepository;
+		this.movieRatingRepository = movieRatingRepository;
 	}
 
 	@GetMapping("/users/recommendations")
     public String recommendations(@RequestBody RecommendArgument newRecommendArgument) {
 		Recommendation recommend = new Recommendation(newRecommendArgument.getGender(), newRecommendArgument.getAge(), newRecommendArgument.getOccupation(), newRecommendArgument.getGenres(), 
-			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository);
+			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository, movieRatingRepository);
 		recommend.getMovielist();
 		String s = recommend.toString();
 		return s;
@@ -61,7 +65,7 @@ public class RecommendController {
 		if (newRecommendArgument2.getLimit() == 0)
 			newRecommendArgument2.setLimit();
 		Recommendation recommend2 = new Recommendation(newRecommendArgument2.getTitle(), newRecommendArgument2.getLimit(),
-			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository);
+			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository, movieRatingRepository);
 		recommend2.getMovielist();
 		String s = recommend2.toString();
 		return s;

@@ -20,6 +20,8 @@ import project.project4.rating.RatingRepository;
 import project.project4.rating.Rating;
 import project.project4.user.UserRepository;
 import project.project4.user.User;
+import project.project4.movie_rating.MovieRating;
+import project.project4.movie_rating.MovieRatingRepository;
 
 
 public class Recommendation {
@@ -55,9 +57,10 @@ public class Recommendation {
 	private final MoviePosterRepository movieposterRepository;
 	private final RatingRepository ratingRepository;
 	private final UserRepository userRepository;
+    private final MovieRatingRepository movieRatingRepository;
 
     public Recommendation(String title, int limit, LinkRepository linkRepository, MovieRepository movieRepository, MoviePosterRepository movieposterRepository, 
-		RatingRepository ratingRepository, UserRepository userRepository) {
+		RatingRepository ratingRepository, UserRepository userRepository, MovieRatingRepository movieRatingRepository) {
         this.title = title;
         this.limit = limit;
         this.gender = "";
@@ -72,10 +75,11 @@ public class Recommendation {
 		this.movieposterRepository = movieposterRepository;
 		this.ratingRepository = ratingRepository;
 		this.userRepository = userRepository;
+        this.movieRatingRepository = movieRatingRepository;
     }
 
     public Recommendation(String gender, String age, String occupation, String genre, LinkRepository linkRepository, MovieRepository movieRepository, 
-        MoviePosterRepository movieposterRepository, RatingRepository ratingRepository, UserRepository userRepository) {
+        MoviePosterRepository movieposterRepository, RatingRepository ratingRepository, UserRepository userRepository, MovieRatingRepository movieRatingRepository) {
         this.gender = gender;
         if (age.equals(""))
             this.age = 0;
@@ -93,6 +97,7 @@ public class Recommendation {
 		this.movieposterRepository = movieposterRepository;
 		this.ratingRepository = ratingRepository;
 		this.userRepository = userRepository;
+        this.movieRatingRepository = movieRatingRepository;
     }
 
     @Override
@@ -390,23 +395,80 @@ public class Recommendation {
 
                 // ratings.dat 파일에서 userIdList에 있는 user들의 rating을 MovieGroup안에 (movieId, rating_sum, ratingNum, rating_avg, flag) 형태로 저장
                 //  List<Rating> ratingTest
-                for (User user: userTest) {
-                    List<Rating> ratingTest = ratingRepository.findByUserId("1");
-                    for (Rating r: ratingTest) {
-                        System.out.println("userId: " + r.getUserId());
-                        System.out.println("MovieId: " + r.getMovieId());
-                        System.out.println("--------------");
-                    }
-                }
                 // ratingtest = ratingRepository.findByUserId("1").get();
                 // System.out.println("userId: " + ratingtest.getUserId());
                 // System.out.println("MovieId: " + ratingtest.getMovieId());
                 
                 // List<Rating> ratingTest = ratingRepository.findById(ratingId).orElse(null);
+                // Double.toString
+                // Double.parseDouble(str);
+                // (movieId, rating_sum, ratingNum, rating_avg, flag)
+                // List<MovieRating> movieRatingList = new ArrayList<>();
+                double [][] movieGroupTest = new double[4000][6];
+                int count1 = 0;
+                int ratecount1 = 0;
+                double c1=0;
+                for (User user: userTest) {
+                    List<Rating> ratingTest = ratingRepository.findByUserId(user.getId());
+                    int ratingSum = 0;
+                    int ratingNum = 0;
+                    int movieIdTest = 0;
+                    for (Rating r: ratingTest) {
+                        ratingSum += Integer.parseInt(r.getRating());
+                        ratingNum++;
+                        ratecount1++;
+                        movieIdTest = Integer.parseInt(r.getMovieId());
+                    }
+                    double ratingAvg = (double)ratingSum/ratingNum;
+                    movieGroupTest[count1][0] = movieIdTest;
+                    movieGroupTest[count1][1] = ratingSum;
+                    movieGroupTest[count1][2] = ratingNum;
+                    movieGroupTest[count1][3] = ratingAvg;
+                    movieGroupTest[count1][4] = 0;
+                    count1++;
+                    c1 += ratingAvg;
+                    // MovieRating movieRating = new MovieRating(movieIdTest, Integer.toString(ratingSum), Integer.toString(ratingNum), Double.toString(ratingAvg));
+                    // System.out.println("movieId: " + movieIdTest);
+                    // System.out.println("ratingSum: " + ratingSum);
+                    // System.out.println("ratingNum: " + ratingNum);
+                    // System.out.println("ratingAvg: " + ratingAvg);
+                    // movieRatingList.add(movieRating);
+                    // movieRatingRepository.save(movieRating);
+                }
+
+                System.out.println("count: " + count1);
+                System.out.println("rate: " + ratecount1);
+                c1 = c1/count1;
+                for (int i=0; i<count1; i++) {
+                    movieGroupTest[i][5] = (movieGroupTest[i][1])/(movieGroupTest[i][2]+ratecount1/count1)+(ratecount1*c1)/(count1*(movieGroupTest[i][2]+ratecount1/count1));
+                }
+
+                Arrays.sort(movieGroupTest, new Comparator<double[]>(){
+                    public int compare(double[] m1, double[] m2) {
+                        if (m1[5] == m2[5]) {
+                            return Double.compare(m2[3], m1[3]);
+                        }
+                        else {
+                            return Double.compare(m2[5], m1[5]);
+                        }
+                    }
+                });
+
+                for (int i=0; i <count1; i++) {
+                    // System.out.println("movieId: " + movieGroupTest[i][0]);
+                    // System.out.println("ratingSum: " + movieGroupTest[i][1]);
+                    // System.out.println("ratingNum: " + movieGroupTest[i][2]);
+                    // System.out.println("ratingAvg: " + movieGroupTest[i][3]);
+                    // System.out.println("ratingSort: " + movieGroupTest[i][5]);
+                    // System.out.println("-------------------");
+                }
+
+
                 double [][] movieGroup = new double[4000][6];
                 String ratingline = "";
                 int count = 0;
                 int ratecount = 0;
+                // movieRatingRepository.saveAll(movieRatingList);
                 while((ratingline = ratingbuf.readLine()) != null){
                     String[] ratingwords = ratingline.split("::");
                     String userId = ratingwords[0];
