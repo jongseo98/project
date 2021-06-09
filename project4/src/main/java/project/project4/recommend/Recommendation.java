@@ -47,8 +47,8 @@ public class Recommendation {
     private boolean err;
     private String err_msg;
 
-    private ArrayList<Result> resultarray = new ArrayList<Result>();
-    public ArrayList<Result> getResultarray() {
+    private List<Result> resultarray = new List<Result>();
+    public List<Result> getResultarray() {
         return resultarray;
     }
 
@@ -208,9 +208,6 @@ public class Recommendation {
         return result;
     }
 
-    // private static String [][] movie_list = new String[limit][3];
-    // private static String [] link_list = new String[limit];
-
     // gender:age:occup => user.dat 파일에서 일치하는 user 를 userID list에 추가
     // rating.dat 파일에서 해당 user가 쓴 평점을 통해 movieGroup에 (movieId, rating_sum, rating_num, rating_avg) 추가
     // movieGroup을 rating_avg 순으로 정렬, 같다면 rating_num 순으로 내림차순 정렬 
@@ -359,37 +356,14 @@ public class Recommendation {
                 // users.dat 파일에서 (gender:age:occup)에 해당하는 유저 userIdList에 추가
                 String userline = "";
 
-                ArrayList<String> userIdListTest = new ArrayList<String>();
-                List<User> userTest = findUserList(gender_null, age_null, occup_null);
-                // for (User u: userTest) {
+                List<User> userList = findUserList(gender_null, age_null, occup_null);
+                // for (User u: userList) {
                 //     System.out.println("Id: " + u.getId());
                 //     System.out.println("gender: " + u.getGender());
                 //     System.out.println("age: " + u.getAge());
                 //     System.out.println("occupation: " + u.getOccupation());
                 //     System.out.println("--------------------------------");
                 // }
-
-                ArrayList<String> userIdList = new ArrayList<String>();
-                while((userline = userbuf.readLine()) != null){
-                    String[] userwords = userline.split("::");
-                    String userId = userwords[0];
-                    String userGender = userwords[1];
-                    String userAge = userwords[2];
-                    int userOccup = Integer.parseInt(userwords[3]);
-                    // occup / gender / age
-                    if (occup_list[userOccup].contains("/")) {
-                        String[] occups = occup_list[userOccup].split("/");
-                        for (String s: occups) {
-                            if ((s.equalsIgnoreCase(occupation) || occup_null) && (userGender.equalsIgnoreCase(gender) || gender_null) && (userAge.equals(age_index) || age_null)){
-                                userIdList.add(userId);
-                                break;
-                            }
-                        }
-                    } else {
-                        if ((occup_list[userOccup].equalsIgnoreCase(occupation) || occup_null) && (userGender.equalsIgnoreCase(gender) || gender_null) && (userAge.equals(age_index) || age_null))
-                            userIdList.add(userId);
-                    }
-                }
 
                 // System.out.println("user length: " + userIdList.size());
 
@@ -408,7 +382,7 @@ public class Recommendation {
                 int count1 = 0;
                 int ratecount1 = 0;
                 double c1=0;
-                for (User user: userTest) {
+                for (User user: userList) {
                     List<Rating> ratingTest = ratingRepository.findByUserId(user.getId());
                     int ratingSum = 0;
                     int ratingNum = 0;
@@ -553,46 +527,135 @@ public class Recommendation {
                         for (int i = 0; i < count1; i++) {
                             if (index1 >= limit)
                                 break;
-                            // if (limit_null) {
-                            //     if (movieGroup[i][2] < ratecount/count) 
-                            //         continue;
-                            // }
-                            while((movieline = moviebuf.readLine()) != null){
-                                boolean flag = false;
-                                boolean flag2 = false;
-                                String[] moviewords = movieline.split("::");
-                                Integer movieId = Integer.parseInt(moviewords[0]);
-                                String movieName = moviewords[1];
-                                String moviegenre = moviewords[2];
-                                String[] genres_list = moviegenre.split("\\|"); // 특수문자 | 는 앞에 \\가 붙어야 구분가능
-                                String[] input_genre_list = genre.split("\\|");
-                                for (String input: input_genre_list) {
-                                    for (String s: genres_list) {
-                                        if (input.equalsIgnoreCase(s)) {
-                                            if (movieId == (int)movieGroup[i][0]) {
-                                                movie_list[index1][0] = Integer.toString(movieId);
-                                                movie_list[index1][1] = movieName;
-                                                movie_list[index1][2] = moviegenre;
-                                                movieGroup[i][4] = 1;
-                                                index1++;
-                                                flag = true;
-                                                flag2 = true;
-                                                break;
-                                                
-                                            } 
-                                        }
+                            
+                            int id = (int)movieGroupTest[i][0];
+                            String movieId = Integer.toString(id);
+                            Movie movie = movieRepository.findById(movieId).get();
+                            // String genres = movie.getGenre();
+                            String []genres_list = movie.getGenre().split("\\|");
+                            String[] input_genre_list = genre.split("\\|");
+                            boolean flag = false;
+                            for (String input: input_genre_list) {
+                                for (String s: genres_list) {
+                                    if (input.equalsIgnoreCase(s)) {
+                                        // movie_list[index1][0] = movieId;
+                                        // movie_list[index1][1] = movieName;
+                                        // movie_list[index1][2] = moviegenre;
+                                        movieGroupTest[i][4] = 1;
+                                        Result result = new Result();
+                                        result.setTitle(movie.getTitle());
+                                        result.setGenre(movie.getGenre());
+                                        
+                                        resultRepository.save(result);
+                                        index1++;
+                                        flag = true;
+                                        break; 
                                     }
-                                    if (flag)
-                                        break;
                                 }
-                                if (flag2)
+                                if (flag)
                                     break;
                             }
+
+                            if (i == (count1 -1)) {
+                                if (index1 < limit) {
+                                    // System.out.println("First index: " + index);
+                                    for (int j = 0; j < count1; j++) {
+                                        if (index1 >= limit)
+                                            break;
+                                        if ((int) movieGroupTest[j][4] != 0)
+                                            continue;
+                                            
+                                        int id2 = (int)movieGroupTest[j][0];
+                                        String movieId2 = Integer.toString(id2);
+                                        Movie movie2 = movieRepository.findById(movieId2).get();
+                                        // movie_list[index][0] = Integer.toString(movieId);
+                                        // movie_list[index][1] = movieName;
+                                        // movie_list[index][2] = moviegenre;
+                                        movieGroupTest[j][4] = 1;
+                                        Result result = new Result();
+                                        result.setTitle(movie2.getTitle());
+                                        result.setGenre(movie2.getGenre());
+                                        resultRepository.save(result);;
+                                        index1++;
+                                    }
+                                }
+                            }
+                        }
+                        List<Result> resultList = resultRepository.findAll();
+                        for (Result r: resultList) {
+                            System.out.println("title: " + r.getTitle());
+                            System.out.println("gerne: " + r.getGenre());
+                            System.out.println("-----------");
+                        }
+
+                        
+
+                    } else {
+                        System.out.println("A");
+                        for (int i = 0; i < count1; i++) {
+                            if (index1 >= limit)
+                                break;
+                            
+                            int id = (int)movieGroup[i][0];
+                            String movieId = Integer.toString(id);
+                            Movie movie = movieRepository.findById(movieId).get();
+                            // String genres = movie.getGenre();
+                            String [] genres_list = movie.getGenre().split("\\|");
+                            for (String s: genres_list) {
+                                if (genre.equalsIgnoreCase(s)) {
+                                    // movie_list[index1][0] = movieId;
+                                    // movie_list[index1][1] = movieName;
+                                    // movie_list[index1][2] = moviegenre;
+                                    movieGroupTest[i][4] = 1;
+                                    Result result = new Result();
+                                    result.setTitle(movie.getTitle());
+                                    result.setGenre(movie.getGenre());
+                                    resultRepository.save(result);
+                                    index1++;
+                                    break; 
+                                }
+                            }
+                            if (i == (count1 -1)) {
+                                if (index1 < limit) {
+                                    // System.out.println("index1: " + index1);
+                                    for (int j = 0; j < count1; j++) {
+                                        // System.out.println("index1: " + index1);
+                                        // System.out.println("limit: " + limit);
+                                        // System.out.println("MovieGroupTest: " + (int) movieGroupTest[j][4]);
+                                        if (index1 >= limit)
+                                            break;
+                                        if ((int) movieGroupTest[j][4] != 0)
+                                            continue;
+                                            
+                                        int id2 = (int)movieGroupTest[j][0];
+                                        String movieId2 = Integer.toString(id2);
+                                        Movie movie2 = movieRepository.findById(movieId2).get();
+                                        // movie_list[index][0] = Integer.toString(movieId);
+                                        // movie_list[index][1] = movieName;
+                                        // movie_list[index][2] = moviegenre;
+                                        movieGroupTest[j][4] = 1;
+                                        Result result = new Result();
+                                        result.setTitle(movie2.getTitle());
+                                        result.setGenre(movie2.getGenre());
+                                        resultRepository.save(result);
+                                        index1++;
+                                        // System.out.println();
+                                    }
+                                }
+                            }
+                        }
+                        List<Result> resultList = resultRepository.findAll();
+                        for (Result r: resultList) {
+                            System.out.println("title: " + r.getTitle());
+                            System.out.println("gerne: " + r.getGenre());
+                            System.out.println("-----------");
+                        }
+                    }
                 } else {
                     for (int i=0; i < limit; i++) {
                         int id = (int)movieGroup[i][0];
                         String movieId = Integer.toString(id);
-                        System.out.println("movieId: " + movieId);
+                        // System.out.println("movieId: " + movieId);
                         Movie movie = movieRepository.findById(movieId).get();
                         Result result = new Result();
                         result.setTitle(movie.getTitle());

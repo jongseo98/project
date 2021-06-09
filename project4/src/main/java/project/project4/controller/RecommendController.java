@@ -52,13 +52,13 @@ public class RecommendController {
 	}
 
 	@GetMapping("/users/recommendations")
-    public String recommendations(@RequestBody RecommendArgument newRecommendArgument) {
+    public List<Result> recommendations(@RequestBody RecommendArgument newRecommendArgument) {
 		Recommendation recommend = new Recommendation(newRecommendArgument.getGender(), newRecommendArgument.getAge(), newRecommendArgument.getOccupation(), newRecommendArgument.getGenres(), 
 			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository, resultRepository);
 		resultRepository.deleteAll();
 		recommend.getMovielist();
-		String s = recommend.toString();
-		return s;
+		List<Result> resultList = resultRepository.findAll();
+		return resultList;
 	}
 
 	@GetMapping("/movies/recommendations")
