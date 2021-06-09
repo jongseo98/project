@@ -2,13 +2,13 @@ package project.project4;
 
 import java.util.Objects;
 
-public class Movie {
+public class Result {
 
 	private String title;
     private String genre;
     private String imdb;
 
-	public Movie(String title, String genre, String imdb) {
+	public Result(String title, String genre, String imdb) {
 		this.title = title;
         this.genre = genre;
         this.imdb = imdb;

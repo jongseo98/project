@@ -8,6 +8,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
+
+import project.project4.link.LinkRepository;
+import project.project4.link.Link;
+import project.project4.movie.MovieRepository;
+import project.project4.movie.Movie;
+import project.project4.movie_poster.MoviePosterRepository;
+import project.project4.movie_poster.MoviePoster;
+import project.project4.rating.RatingRepository;
+import project.project4.rating.Rating;
+import project.project4.user.UserRepository;
+import project.project4.user.User;
 
 
 public class Recommendation {
@@ -33,26 +45,37 @@ public class Recommendation {
     private boolean err;
     private String err_msg;
 
-    private ArrayList<Movie> result = new ArrayList<Movie>();
-
-    public ArrayList<Movie> getResult() {
-        return result;
+    private ArrayList<Result> resultarray = new ArrayList<Result>();
+    public ArrayList<Result> getResultarray() {
+        return resultarray;
     }
 
-    public Recommendation(String title, int limit) {
+    private final LinkRepository linkRepository;
+	private final MovieRepository movieRepository;
+	private final MoviePosterRepository movieposterRepository;
+	private final RatingRepository ratingRepository;
+	private final UserRepository userRepository;
+
+    public Recommendation(String title, int limit, LinkRepository linkRepository, MovieRepository movieRepository, MoviePosterRepository movieposterRepository, 
+		RatingRepository ratingRepository, UserRepository userRepository) {
         this.title = title;
         this.limit = limit;
-
         this.gender = "";
         this.age = 0;
         this.occupation = "";
         this.genre = "";
-
         this.err = false;
         this.err_msg = "";
+
+        this.linkRepository = linkRepository;
+		this.movieRepository = movieRepository;
+		this.movieposterRepository = movieposterRepository;
+		this.ratingRepository = ratingRepository;
+		this.userRepository = userRepository;
     }
 
-    public Recommendation(String gender, String age, String occupation, String genre) {
+    public Recommendation(String gender, String age, String occupation, String genre, LinkRepository linkRepository, MovieRepository movieRepository, 
+        MoviePosterRepository movieposterRepository, RatingRepository ratingRepository, UserRepository userRepository) {
         this.gender = gender;
         if (age.equals(""))
             this.age = 0;
@@ -60,12 +83,16 @@ public class Recommendation {
             this.age = Integer.parseInt(age);
         this.occupation = occupation;
         this.genre = genre;
-
         this.title = "";
         this.limit = 10;
-
         this.err = false;
         this.err_msg = "";
+
+        this.linkRepository = linkRepository;
+		this.movieRepository = movieRepository;
+		this.movieposterRepository = movieposterRepository;
+		this.ratingRepository = ratingRepository;
+		this.userRepository = userRepository;
     }
 
     @Override
@@ -76,10 +103,10 @@ public class Recommendation {
         } else {
             s += "[{\n";
             for (int i=0; i<limit; i++) {
-                Movie movie = result.remove(0);
-                s += "  \"title\": " + "\"" + movie.getTitle() + "\"" + ",\n";
-                s += "  \"genre\": " + "\"" + movie.getGenre() + "\"" + ",\n";
-                s += "  \"imdb\": " + "\""+ movie.getImdb() + "\"" + ",\n";
+                Result result= resultarray.remove(0);
+                s += "  \"title\": " + "\"" + result.getTitle() + "\"" + ",\n";
+                s += "  \"genre\": " + "\"" + result.getGenre() + "\"" + ",\n";
+                s += "  \"imdb\": " + "\""+ result.getImdb() + "\"" + ",\n";
                 
                 if (i == limit -1)
                     s += "}]\n";
@@ -91,6 +118,90 @@ public class Recommendation {
         }
     	return s;
 	}
+
+    public String getOccupIndex() {
+        String idx_occup = "";
+        boolean occup_bool = false;
+        int idx = 0;
+        for (String occup: occup_list) {
+            if (occup.contains("/")) {
+                String[] occups = occup.split("/");
+                for (String s: occups) {
+                    if (occupation.equalsIgnoreCase(s)) {
+                        occup_bool = true;
+                        idx_occup =  Integer.toString(idx);
+                        break;
+                    }
+                }
+            } else {
+                if (occupation.equalsIgnoreCase(occup))
+                    occup_bool = true;
+                    idx_occup =  Integer.toString(idx);
+                }
+            if (occup_bool)
+                break;
+            idx++;
+        }
+        return idx_occup;
+    }
+
+    public String getAgeIdx(int age) {
+        String age_index = "0";
+        if (age != 0) {
+            if (age < 18) 
+                age_index = "1";
+            else if (age < 25)
+                age_index = "18";
+            else if (age < 35)
+                age_index = "25";
+            else if (age < 45)
+                age_index = "35";
+            else if (age < 50)
+                age_index = "45";
+            else if (age < 56)
+                age_index = "50";
+            else
+                age_index = "56";
+        }
+        return age_index;   
+    }
+
+    public List<User> findUserList(boolean gender_null, boolean age_null, boolean occup_null) {
+        List<User> result;
+        String str_age = getAgeIdx(age);
+        String idx_occup = getOccupIndex();
+        System.out.println("idx_occup: " + idx_occup);
+        System.out.println("gender_null: " + gender_null);
+        System.out.println("age_null: " + age_null);
+        System.out.println("occup_null: " + occup_null);
+        if (gender_null && age_null && occup_null) {
+            result = userRepository.findAll();
+            System.out.println("1");
+        } else if (gender_null && age_null) {
+            result = userRepository.findByOccupation(idx_occup);
+            System.out.println("2");
+        } else if (gender_null && occup_null) {
+            result = userRepository.findByAge(str_age);
+            System.out.println("3");
+        } else if (age_null && occup_null) {
+            result = userRepository.findByGender(gender);
+            System.out.println("4");
+        } else if (gender_null) {
+            result = userRepository.findByAgeAndOccupation(str_age, idx_occup);
+            System.out.println("5");
+        } else if (age_null) {
+            result = userRepository.findByGenderAndOccupation(gender, idx_occup);
+            System.out.println("6");
+        } else if (occup_null) {
+            result = userRepository.findByGenderAndAge(gender, str_age);
+            System.out.println("7");
+        }
+        else {
+            result = userRepository.findByGenderAndAgeAndOccupation(gender, str_age, idx_occup);
+            System.out.println("8");
+        }
+        return result;
+    }
 
     // private static String [][] movie_list = new String[limit][3];
     // private static String [] link_list = new String[limit];
@@ -105,7 +216,7 @@ public class Recommendation {
     public void getMovielist() {
         try{
             err = false;
-            //파일 객체 생성
+            // 파일 객체 생성
             File moviefile = new File("/root/project/project4/src/main/resources/static/data/ml-1m/movies.dat");
             File ratingfile = new File("/root/project/project4/src/main/resources/static/data/ml-1m/ratings.dat");
             File userfile = new File("/root/project/project4/src/main/resources/static/data/ml-1m/users.dat");
@@ -237,34 +348,31 @@ public class Recommendation {
 
             // *  1:  "Under 18" * 18:  "18-24" * 25:  "25-34" * 35:  "35-44" * 45:  "45-49" * 50:  "50-55" * 56:  "56+"
             String age_index = "0";
-            if (age != 0) {
-                if (age < 18) 
-                    age_index = "1";
-                else if (age < 25)
-                    age_index = "18";
-                else if (age < 35)
-                    age_index = "25";
-                else if (age < 45)
-                    age_index = "35";
-                else if (age < 50)
-                    age_index = "45";
-                else if (age < 56)
-                    age_index = "50";
-                else
-                    age_index = "56";
-            }
+            age_index = getAgeIdx(age);
             boolean check = true;
             while (check) {
                 // users.dat 파일에서 (gender:age:occup)에 해당하는 유저 userIdList에 추가
                 String userline = "";
+
+                ArrayList<String> userIdListTest = new ArrayList<String>();
+                List<User> userTest = findUserList(gender_null, age_null, occup_null);
+                // for (User u: userTest) {
+                //     System.out.println("Id: " + u.getId());
+                //     System.out.println("gender: " + u.getGender());
+                //     System.out.println("age: " + u.getAge());
+                //     System.out.println("occupation: " + u.getOccupation());
+                //     System.out.println("--------------------------------");
+                // }
+
                 ArrayList<String> userIdList = new ArrayList<String>();
+                
                 while((userline = userbuf.readLine()) != null){
                     String[] userwords = userline.split("::");
                     String userId = userwords[0];
                     String userGender = userwords[1];
                     String userAge = userwords[2];
                     int userOccup = Integer.parseInt(userwords[3]);
-
+                    // occup / gender / age
                     if (occup_list[userOccup].contains("/")) {
                         String[] occups = occup_list[userOccup].split("/");
                         for (String s: occups) {
@@ -554,8 +662,8 @@ public class Recommendation {
             }
 
             for (int i=0; i<limit; i++) {
-                Movie movie = new Movie(movie_list[i][1], movie_list[i][2], "http://www.imdb.com/title/tt" + link_list[i]);
-                result.add(movie);
+                Result result = new Result(movie_list[i][1], movie_list[i][2], "http://www.imdb.com/title/tt" + link_list[i]);
+                resultarray.add(result);
             }
 
             moviebuf.close();

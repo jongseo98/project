@@ -49,7 +49,8 @@ public class RecommendController {
 
 	@GetMapping("/users/recommendations")
     public String recommendations(@RequestBody RecommendArgument newRecommendArgument) {
-		Recommendation recommend = new Recommendation(newRecommendArgument.getGender(), newRecommendArgument.getAge(), newRecommendArgument.getOccupation(), newRecommendArgument.getGenres());
+		Recommendation recommend = new Recommendation(newRecommendArgument.getGender(), newRecommendArgument.getAge(), newRecommendArgument.getOccupation(), newRecommendArgument.getGenres(), 
+			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository);
 		recommend.getMovielist();
 		String s = recommend.toString();
 		return s;
@@ -59,7 +60,8 @@ public class RecommendController {
     public String recommendations2(@RequestBody RecommendArgument2 newRecommendArgument2) {
 		if (newRecommendArgument2.getLimit() == 0)
 			newRecommendArgument2.setLimit();
-		Recommendation recommend2 = new Recommendation(newRecommendArgument2.getTitle(), newRecommendArgument2.getLimit());
+		Recommendation recommend2 = new Recommendation(newRecommendArgument2.getTitle(), newRecommendArgument2.getLimit(),
+			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository);
 		recommend2.getMovielist();
 		String s = recommend2.toString();
 		return s;
