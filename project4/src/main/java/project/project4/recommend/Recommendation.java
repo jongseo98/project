@@ -1,5 +1,6 @@
 package project.project4;
 
+// import java.lang.NullPointException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -61,6 +62,7 @@ public class Recommendation {
 
     public Recommendation(String title, int limit, LinkRepository linkRepository, MovieRepository movieRepository, MoviePosterRepository movieposterRepository, 
 		RatingRepository ratingRepository, UserRepository userRepository, ResultRepository resultRepository) {
+        System.out.println("Constructor");
         this.title = title;
         this.limit = limit;
         this.gender = "";
@@ -208,6 +210,9 @@ public class Recommendation {
         return result;
     }
 
+    
+
+
     // gender:age:occup => user.dat 파일에서 일치하는 user 를 userID list에 추가
     // rating.dat 파일에서 해당 user가 쓴 평점을 통해 movieGroup에 (movieId, rating_sum, rating_num, rating_avg) 추가
     // movieGroup을 rating_avg 순으로 정렬, 같다면 rating_num 순으로 내림차순 정렬 
@@ -219,18 +224,6 @@ public class Recommendation {
         try{
             err = false;
             // 파일 객체 생성
-            File moviefile = new File("/root/project/project4/src/main/resources/static/data/ml-1m/movies.dat");
-            File ratingfile = new File("/root/project/project4/src/main/resources/static/data/ml-1m/ratings.dat");
-            File userfile = new File("/root/project/project4/src/main/resources/static/data/ml-1m/users.dat");
-            File linkfile = new File("/root/project/project4/src/main/resources/static/data/ml-1m/links.dat");
-            //입력 버퍼 생성
-            BufferedReader moviebuf = new BufferedReader(new FileReader(moviefile));
-            BufferedReader ratingbuf = new BufferedReader(new FileReader(ratingfile));
-            BufferedReader userbuf = new BufferedReader(new FileReader(userfile));
-            BufferedReader linkbuf = new BufferedReader(new FileReader(linkfile));
-
-            String [][] movie_list = new String[limit][3];
-            String [] link_list = new String[limit];
             int titleId=0; //w  
 
             boolean gender_null = false;
@@ -259,20 +252,10 @@ public class Recommendation {
             if (!limit_null) {
                 System.out.println(title);
                 genre_null = false;
-                String moviedat_line = "";
-                while((moviedat_line = moviebuf.readLine()) != null){
-                    String[] moviewords = moviedat_line.split("::");
-                    String movieName = moviewords[1];
-                    titleId =Integer.parseInt(moviewords[0]);//w
-                    // System.out.println(movieName);
-                    if (title.equalsIgnoreCase(movieName)) {
-                        genre = moviewords[2];
-                        break;
-                    }
-                }
-                System.out.println(genre);
-                System.out.println(limit);
-                moviebuf = new BufferedReader(new FileReader(moviefile));
+                Movie movie = movieRepository.findByTitle(title);
+                genre = movie.getGenre();
+                System.out.println("genre: " + genre);
+                System.out.println("limit: " + limit);
             } 
             // gender 이 비정상일때
             if (!gender_null) {
@@ -353,10 +336,10 @@ public class Recommendation {
             age_index = getAgeIdx(age);
             boolean check = true;
             while (check) {
+                System.out.println("check");
                 // users.dat 파일에서 (gender:age:occup)에 해당하는 유저 userIdList에 추가
                 String userline = "";
 
-                List<User> userList = findUserList(gender_null, age_null, occup_null);
                 // for (User u: userList) {
                 //     System.out.println("Id: " + u.getId());
                 //     System.out.println("gender: " + u.getGender());
@@ -365,46 +348,193 @@ public class Recommendation {
                 //     System.out.println("--------------------------------");
                 // }
 
-                double [][] movieGroupTest = new double[4000][6];
-                int count1 = 0;
-                int ratecount1 = 0;
-                double c1=0;
-                for (User user: userList) {
-                    List<Rating> ratingTest = ratingRepository.findByUserId(user.getId());
-                    int ratingSum = 0;
-                    int ratingNum = 0;
-                    int movieIdTest = 0;
-                    for (Rating r: ratingTest) {
-                        ratingSum += Integer.parseInt(r.getRating());
-                        ratingNum++;
-                        ratecount1++;
-                        movieIdTest = Integer.parseInt(r.getMovieId());
+                double [][] movieGroup = new double[4000][6];
+                int count = 0;
+                int ratecount = 0;
+                double c=0;
+                boolean all_null = false;
+                if (gender_null && age_null && occup_null)
+                    all_null = true;
+
+                if (limit_null) {
+                    if (all_null && !genre_null) {
+                        System.out.println("case  A");
+                        List<Movie> movieList = new ArrayList<>();
+                        List<String> checkList = new ArrayList<>();
+                        String[] input_genre_list = genre.split("\\|");
+                        for (String s:input_genre_list) {
+                            List<Movie> temp = movieRepository.findByGenreLike(s);
+                            for (Movie m : temp) {
+                                if (!checkList.contains(m.getId())) {
+                                    movieList.add(m);
+                                    checkList.add(m.getId());
+                                }
+                            }
+                        }
+                        for (Movie movie: movieList) {
+                            System.out.println("gerne: " + movie.getGenre());
+                            List<Rating> ratingList = ratingRepository.findByMovieId(movie.getId());
+                            for (Rating r: ratingList) {
+                                int rating = Integer.parseInt(r.getRating());
+                                int movieId = Integer.parseInt(r.getMovieId());
+                                if (count == 0) {
+                                    movieGroup[count][0] = movieId;
+                                    movieGroup[count][1] = rating;
+                                    movieGroup[count][2] = 1;
+                                    movieGroup[count][3] = rating;
+                                    movieGroup[count][4] = 0;
+                                    count++;
+                                    ratecount++;
+                                } else {
+                                    for(int i=0 ; i < count ; i++) {
+                                        if ((int) movieGroup[i][0] == movieId) { // movieGroup안에 movieId와 같은 영화가 이미 있다면 //w
+                                            movieGroup[i][1] += rating;
+                                            movieGroup[i][2] += 1;
+                                            movieGroup[i][3] = movieGroup[i][1] / movieGroup[i][2];
+                                            movieGroup[i][4] = 0;
+                                            ratecount++;
+                                            break;
+                                        }
+                                        else if (i == (count-1)){// movieGroup 안에 movie ID와 같은 영화가 없을때//w
+                                            movieGroup[count][0] = movieId;
+                                            movieGroup[count][1] = rating;
+                                            movieGroup[count][2] = 1;
+                                            movieGroup[count][3] = rating;
+                                            movieGroup[count][4] = 0;
+                                            ratecount++;
+                                            count++;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        System.out.println("case  B");
+                        List<User> userList = findUserList(gender_null, age_null, occup_null);
+                        for (User user: userList) {
+                            List<Rating> ratingList = ratingRepository.findByUserId(user.getId());
+                            for (Rating r: ratingList) {
+                                int rating = Integer.parseInt(r.getRating());
+                                int movieId = Integer.parseInt(r.getMovieId());
+                                if (count == 0) {
+                                    movieGroup[count][0] = movieId;
+                                    movieGroup[count][1] = rating;
+                                    movieGroup[count][2] = 1;
+                                    movieGroup[count][3] = rating;
+                                    movieGroup[count][4] = 0;
+                                    count++;
+                                    ratecount++;
+                                } else {
+                                    for(int i=0 ; i < count ; i++) {
+                                        if ((int) movieGroup[i][0] == movieId) { // movieGroup안에 movieId와 같은 영화가 이미 있다면 //w
+                                            movieGroup[i][1] += rating;
+                                            movieGroup[i][2] += 1;
+                                            movieGroup[i][3] = movieGroup[i][1] / movieGroup[i][2];
+                                            movieGroup[i][4] = 0;
+                                            ratecount++;
+                                            break;
+                                        }
+                                        else if (i == (count-1)){// movieGroup 안에 movie ID와 같은 영화가 없을때//w
+                                            movieGroup[count][0] = movieId;
+                                            movieGroup[count][1] = rating;
+                                            movieGroup[count][2] = 1;
+                                            movieGroup[count][3] = rating;
+                                            movieGroup[count][4] = 0;
+                                            ratecount++;
+                                            count++;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        System.out.println("count: " + count);
+                        System.out.println("rate: " + ratecount);
                     }
-                    double ratingAvg = (double)ratingSum/ratingNum;
-                    movieGroupTest[count1][0] = movieIdTest;
-                    movieGroupTest[count1][1] = ratingSum;
-                    movieGroupTest[count1][2] = ratingNum;
-                    movieGroupTest[count1][3] = ratingAvg;
-                    movieGroupTest[count1][4] = 0;
-                    count1++;
-                    c1 += ratingAvg;
-                    // MovieRating movieRating = new MovieRating(movieIdTest, Integer.toString(ratingSum), Integer.toString(ratingNum), Double.toString(ratingAvg));
-                    // System.out.println("movieId: " + movieIdTest);
-                    // System.out.println("ratingSum: " + ratingSum);
-                    // System.out.println("ratingNum: " + ratingNum);
-                    // System.out.println("ratingAvg: " + ratingAvg);
-                    // movieRatingList.add(movieRating);
-                    // movieRatingRepository.save(movieRating);
+                } else {
+                    System.out.println("case  C");
+                    List<Movie> movieList = new ArrayList<>();
+                    List<String> checkList = new ArrayList<>();
+                    String[] input_genre_list = genre.split("\\|");
+                    for (String s:input_genre_list) {
+                        List<Movie> temp = movieRepository.findByGenreLike(s);
+                        for (Movie m : temp) {
+                            if (!checkList.contains(m.getId())) {
+                                movieList.add(m);
+                                checkList.add(m.getId());
+                            }
+                        }
+                    }
+                    for (Movie movie: movieList) {
+                        if (title.equalsIgnoreCase(movie.getTitle())) {
+                            System.out.println("delte original");
+                            continue;
+                        }
+                            
+                        // System.out.println("gerne: " + movie.getGenre());
+                        // System.out.println("Id: " + movie.getId());
+                        // System.out.println("--------------");
+                        List<Rating> ratingList = ratingRepository.findByMovieId(movie.getId());
+                        int ratingSum = 0;
+                        int ratingNum = 0;
+                        for (Rating r: ratingList) {
+                            int rating = Integer.parseInt(r.getRating());
+                            int movieId = Integer.parseInt(r.getMovieId());
+                            if (count == 0) {
+                                movieGroup[count][0] = movieId;
+                                movieGroup[count][1] = rating;
+                                movieGroup[count][2] = 1;
+                                movieGroup[count][3] = rating;
+                                movieGroup[count][4] = 0;
+                                count++;
+                                ratecount++;
+                            } else {
+                                for(int i=0 ; i < count ; i++) {
+                                    if ((int) movieGroup[i][0] == movieId) { // movieGroup안에 movieId와 같은 영화가 이미 있다면 //w
+                                        movieGroup[i][1] += rating;
+                                        movieGroup[i][2] += 1;
+                                        movieGroup[i][3] = movieGroup[i][1] / movieGroup[i][2];
+                                        movieGroup[i][4] = 0;
+                                        ratecount++;
+                                        break;
+                                    }
+                                    else if (i == (count-1)){// movieGroup 안에 movie ID와 같은 영화가 없을때//w
+                                        movieGroup[count][0] = movieId;
+                                        movieGroup[count][1] = rating;
+                                        movieGroup[count][2] = 1;
+                                        movieGroup[count][3] = rating;
+                                        movieGroup[count][4] = 0;
+                                        ratecount++;
+                                        count++;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
-                System.out.println("count: " + count1);
-                System.out.println("rate: " + ratecount1);
-                c1 = c1/count1;
-                for (int i=0; i<count1; i++) {
-                    movieGroupTest[i][5] = (movieGroupTest[i][1])/(movieGroupTest[i][2]+ratecount1/count1)+(ratecount1*c1)/(count1*(movieGroupTest[i][2]+ratecount1/count1));
+                System.out.println("count: " + count);
+                System.out.println("rate: " + ratecount);
+                if (limit_null) {
+                    if (count < limit) {
+                        occupation = "";
+                        occup_null = true;
+                        System.out.println("count < limit");
+                        continue;
+                    }
+                }
+                check = false;
+
+                for (int i=0; i<count; i++)
+                    c += movieGroup[i][3];
+                c = c/count;
+                for (int i=0; i<count; i++) {
+                    movieGroup[i][5] = (movieGroup[i][1])/(movieGroup[i][2]+ratecount/count)+(ratecount*c)/(count*(movieGroup[i][2]+ratecount/count));
                 }
 
-                Arrays.sort(movieGroupTest, new Comparator<double[]>(){
+                Arrays.sort(movieGroup, new Comparator<double[]>(){
                     public int compare(double[] m1, double[] m2) {
                         if (m1[5] == m2[5]) {
                             return Double.compare(m2[3], m1[3]);
@@ -415,34 +545,25 @@ public class Recommendation {
                     }
                 });
 
-                // for (int i=0; i <count1; i++) {
-                //     // System.out.println("movieId: " + movieGroupTest[i][0]);
-                //     // System.out.println("ratingSum: " + movieGroupTest[i][1]);
-                //     // System.out.println("ratingNum: " + movieGroupTest[i][2]);
-                //     // System.out.println("ratingAvg: " + movieGroupTest[i][3]);
-                //     // System.out.println("ratingSort: " + movieGroupTest[i][5]);
-                //     // System.out.println("-------------------");
+                // for (int i=0; i <count; i++) {
+                //     System.out.println("movieId: " + movieGroup[i][0]);
+                //     System.out.println("ratingSum: " + movieGroup[i][1]);
+                //     System.out.println("ratingNum: " + movieGroup[i][2]);
+                //     System.out.println("ratingAvg: " + movieGroup[i][3]);
+                //     System.out.println("ratingSort: " + movieGroup[i][5]);
+                //     System.out.println("-------------------");
                 // }
 
-                // movieGroup의 movie 개수가 10개 이상이 아닐때 - occupation 을 뺴고 다시 검색
-                if (limit_null) {
-                    if (count1 < limit) {
-                        occupation = "";
-                        occup_null = true;
-                        continue;
-                    }
-                }
-                check = false;
-
+                // movieGroup의 movie 개수가 10개 이상이 아닐때 - occupation 을 뺴고 다시 검사
                 // (movieId, rating_sum, ratingNum, rating_avg, flag, sort_arg)
                 int index1 = 0;
                 if (!genre_null) {
                     if (genre.contains("|")) {
-                        for (int i = 0; i < count1; i++) {
+                        for (int i = 0; i < count; i++) {
                             if (index1 >= limit)
                                 break;
                             
-                            int id = (int)movieGroupTest[i][0];
+                            int id = (int)movieGroup[i][0];
                             String movieId = Integer.toString(id);
                             Movie movie = movieRepository.findById(movieId).get();
                             // String genres = movie.getGenre();
@@ -452,7 +573,7 @@ public class Recommendation {
                             for (String input: input_genre_list) {
                                 for (String s: genres_list) {
                                     if (input.equalsIgnoreCase(s)) {
-                                        movieGroupTest[i][4] = 1;
+                                        movieGroup[i][4] = 1;
                                         Result result = new Result();
                                         result.setTitle(movie.getTitle());
                                         result.setGenre(movie.getGenre());
@@ -468,19 +589,19 @@ public class Recommendation {
                                     break;
                             }
 
-                            if (i == (count1 -1)) {
+                            if (i == (count -1)) {
                                 if (index1 < limit) {
                                     // System.out.println("First index: " + index);
-                                    for (int j = 0; j < count1; j++) {
+                                    for (int j = 0; j < count; j++) {
                                         if (index1 >= limit)
                                             break;
-                                        if ((int) movieGroupTest[j][4] != 0)
+                                        if ((int) movieGroup[j][4] != 0)
                                             continue;
                                             
-                                        int id2 = (int)movieGroupTest[j][0];
+                                        int id2 = (int)movieGroup[j][0];
                                         String movieId2 = Integer.toString(id2);
                                         Movie movie2 = movieRepository.findById(movieId2).get();
-                                        movieGroupTest[j][4] = 1;
+                                        movieGroup[j][4] = 1;
                                         Result result = new Result();
                                         result.setTitle(movie2.getTitle());
                                         result.setGenre(movie2.getGenre());
@@ -500,21 +621,19 @@ public class Recommendation {
                             System.out.println("-----------");
                         }
 
-                        
-
                     } else {
                         System.out.println("A");
-                        for (int i = 0; i < count1; i++) {
+                        for (int i = 0; i < count; i++) {
                             if (index1 >= limit)
                                 break;
                             
-                            int id = (int)movieGroupTest[i][0];
+                            int id = (int)movieGroup[i][0];
                             String movieId = Integer.toString(id);
                             Movie movie = movieRepository.findById(movieId).get();
                             String [] genres_list = movie.getGenre().split("\\|");
                             for (String s: genres_list) {
                                 if (genre.equalsIgnoreCase(s)) {
-                                    movieGroupTest[i][4] = 1;
+                                    movieGroup[i][4] = 1;
                                     Result result = new Result();
                                     result.setTitle(movie.getTitle());
                                     result.setGenre(movie.getGenre());
@@ -525,19 +644,19 @@ public class Recommendation {
                                     break; 
                                 }
                             }
-                            if (i == (count1 -1)) {
+                            if (i == (count -1)) {
                                 if (index1 < limit) {
                                     // System.out.println("index1: " + index1);
-                                    for (int j = 0; j < count1; j++) {
+                                    for (int j = 0; j < count; j++) {
                                         if (index1 >= limit)
                                             break;
-                                        if ((int) movieGroupTest[j][4] != 0)
+                                        if ((int) movieGroup[j][4] != 0)
                                             continue;
                                             
-                                        int id2 = (int)movieGroupTest[j][0];
+                                        int id2 = (int)movieGroup[j][0];
                                         String movieId2 = Integer.toString(id2);
                                         Movie movie2 = movieRepository.findById(movieId2).get();
-                                        movieGroupTest[j][4] = 1;
+                                        movieGroup[j][4] = 1;
                                         Result result = new Result();
                                         result.setTitle(movie2.getTitle());
                                         result.setGenre(movie2.getGenre());
@@ -559,7 +678,7 @@ public class Recommendation {
                     }
                 } else {
                     for (int i=0; i < limit; i++) {
-                        int id = (int)movieGroupTest[i][0];
+                        int id = (int)movieGroup[i][0];
                         String movieId = Integer.toString(id);
                         Movie movie = movieRepository.findById(movieId).get();
                         Result result = new Result();
@@ -579,8 +698,8 @@ public class Recommendation {
                 }
 
             }
-        } catch(IOException e){
-            System.out.println(e);
+        } finally{
+            // System.out.println("End");
         }
     }
 
