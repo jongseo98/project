@@ -26,6 +26,8 @@ import project.project4.user.UserRepository;
 import project.project4.user.User;
 import project.project4.result.Result;
 import project.project4.result.ResultRepository;
+import project.project4.movie_rating.MovieRating;
+import project.project4.movie_rating.MovieRatingRepository;
 
 
 
@@ -40,21 +42,23 @@ public class RecommendController {
 	private final RatingRepository ratingRepository;
 	private final UserRepository userRepository;
 	private final ResultRepository resultRepository;
+	private final MovieRatingRepository movieRatingRepository;
 
 	public RecommendController(LinkRepository linkRepository, MovieRepository movieRepository, MoviePosterRepository movieposterRepository, 
-		RatingRepository ratingRepository, UserRepository userRepository, ResultRepository resultRepository) {
+		RatingRepository ratingRepository, UserRepository userRepository, ResultRepository resultRepository, MovieRatingRepository movieRatingRepository) {
 		this.linkRepository = linkRepository;
 		this.movieRepository = movieRepository;
 		this.movieposterRepository = movieposterRepository;
 		this.ratingRepository = ratingRepository;
 		this.userRepository = userRepository;
 		this.resultRepository = resultRepository;
+		this.movieRatingRepository = movieRatingRepository;
 	}
 
 	@GetMapping("/users/recommendations")
     public List<Result> recommendations(@RequestBody RecommendArgument newRecommendArgument) {
 		Recommendation recommend = new Recommendation(newRecommendArgument.getGender(), newRecommendArgument.getAge(), newRecommendArgument.getOccupation(), newRecommendArgument.getGenres(), 
-			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository, resultRepository);
+			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository, resultRepository, movieRatingRepository);
 		resultRepository.deleteAll();
 		recommend.getMovielist();
 		List<Result> resultList = resultRepository.findAll();
@@ -66,7 +70,7 @@ public class RecommendController {
 		if (newRecommendArgument2.getLimit() == 0)
 			newRecommendArgument2.setLimit();
 		Recommendation recommend2 = new Recommendation(newRecommendArgument2.getTitle(), newRecommendArgument2.getLimit(),
-			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository, resultRepository);
+			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository, resultRepository, movieRatingRepository);
 		resultRepository.deleteAll();
 		recommend2.getMovielist();
 		List<Result> resultList = resultRepository.findAll();

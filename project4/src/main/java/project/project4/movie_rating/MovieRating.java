@@ -1,46 +1,46 @@
-// package project.project4.result;
+package project.project4.movie_rating;
 
-// import java.util.Objects;
-// import org.springframework.data.mongodb.core.mapping.Document;
-// import org.springframework.data.annotation.Id;
+import java.util.Objects;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
 
-// @Document(collection = "movie_rating")
-// public class MovieRating {
+@Document(collection = "movie_rating")
+public class MovieRating {
 
-//     @Id
-// 	private String movieId;
-//     private String rating;
-//     private String imdb;
+    @Id
+	private String id;
+    private int ratingSum;
+    private int ratingNum;
 
-//     public MovieRating(){}
+    public MovieRating(){}
 
-// 	public MovieRating(String movieId, String rating, String imdb) {
-// 		this.movieId = 
-//         this.imdb = imdb;
-// 	}
+	public MovieRating(String id, int ratingSum, int ratingNum) {
+		this.id = id;
+        this.ratingSum = ratingSum;
+        this.ratingNum = ratingNum;
+	}
 
-// 	public String getTitle() {
-//         return title;
-//     }
+	public String getId() {
+        return id;
+    }
 
-//     public void setTitle(String title) {
-//         this.title = title;
-//     }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-//     public String getGenre() {
-//         return genre;
-//     }
+    public int getRatingSum() {
+        return ratingSum;
+    }
 
-//     public void setGenre(String genre) {
-//         this.genre = genre;
-//     }
+    public void setRatingSum(int ratingSum) {
+        this.ratingSum = ratingSum;
+    }
 
-//     public String getImdb() {
-//         return imdb;
-//     }
+    public int getRatingNum() {
+        return ratingNum;
+    }
 
-//     public void setImdb(String imdb) {
-//         this.imdb = imdb;
-//     }
-
-// }
+    public void setRatingNum(int ratingNum) {
+        this.ratingNum = ratingNum;
+    }
+}
