@@ -62,15 +62,15 @@ public class RecommendController {
 	}
 
 	@GetMapping("/movies/recommendations")
-    public String recommendations2(@RequestBody RecommendArgument2 newRecommendArgument2) {
+    public List<Result> recommendations2(@RequestBody RecommendArgument2 newRecommendArgument2) {
 		if (newRecommendArgument2.getLimit() == 0)
 			newRecommendArgument2.setLimit();
 		Recommendation recommend2 = new Recommendation(newRecommendArgument2.getTitle(), newRecommendArgument2.getLimit(),
 			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository, resultRepository);
 		resultRepository.deleteAll();
 		recommend2.getMovielist();
-		String s = recommend2.toString();
-		return s;
+		List<Result> resultList = resultRepository.findAll();
+		return resultList;
 	}
 
 	// @GetMapping("/index") 
