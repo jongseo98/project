@@ -55,22 +55,28 @@ public class RecommendController {
 		this.movieRatingRepository = movieRatingRepository;
 	}
 
-	@GetMapping("/users/recommendations")
-    public List<Result> recommendations(@RequestBody RecommendArgument newRecommendArgument) {
-		Recommendation recommend = new Recommendation(newRecommendArgument.getGender(), newRecommendArgument.getAge(), newRecommendArgument.getOccupation(), newRecommendArgument.getGenres(), 
-			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository, resultRepository, movieRatingRepository);
+	@RequestMapping(value = "/users/recommendations", method = RequestMethod.POST)
+    public List<Result> recommendations(@RequestParam(name = "gender") String gender, @RequestParam(name = "age") String age, 
+		@RequestParam(name = "occupation") String occupation, @RequestParam(name = "genres") String genres) {
+		Recommendation recommend = new Recommendation(gender, age, occupation, genres, linkRepository, movieRepository, 
+			movieposterRepository, ratingRepository, userRepository, resultRepository, movieRatingRepository);
 		resultRepository.deleteAll();
 		recommend.getMovielist();
 		List<Result> resultList = resultRepository.findAll();
 		return resultList;
 	}
 
-	@GetMapping("/movies/recommendations")
-    public List<Result> recommendations2(@RequestBody RecommendArgument2 newRecommendArgument2) {
-		if (newRecommendArgument2.getLimit() == 0)
-			newRecommendArgument2.setLimit();
-		Recommendation recommend2 = new Recommendation(newRecommendArgument2.getTitle(), newRecommendArgument2.getLimit(),
-			linkRepository, movieRepository, movieposterRepository, ratingRepository, userRepository, resultRepository, movieRatingRepository);
+	@RequestMapping(value = "/movies/recommendations", method = RequestMethod.POST)
+    public List<Result> recommendations2(@RequestParam(name = "title") String title, @RequestParam(name = "limit") String limit) {
+		// RecommendArgument2 newRecommendArgument2 = new RecommendArgument2(title, limit);
+		// if (newRecommendArgument2.getLimit() == 0)
+		// 	newRecommendArgument2.setLimit();
+		System.out.println("title: " + title);
+		System.out.println("limit: " + limit);
+		
+		// newRecommendArgument2.getTitle(), newRecommendArgument2.getLimit();
+		Recommendation recommend2 = new Recommendation(title, Integer.parseInt(limit), linkRepository, movieRepository, 
+			movieposterRepository, ratingRepository, userRepository, resultRepository, movieRatingRepository);
 		resultRepository.deleteAll();
 		recommend2.getMovielist();
 		List<Result> resultList = resultRepository.findAll();
