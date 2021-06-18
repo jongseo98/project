@@ -55,17 +55,18 @@ function test1() {
         dataType: "json",
         type: "post"
     }).done(function(datas)  {
-        var result;
+        var result = "";
         var i;
         for (i=0; i < datas.length; i++) {
             var data = datas[i];
-            if (i == 0)
-            result += '<div class =result>';
-            result += '<h4 class="result_title">' + data.title + '</h4>';
-            result += '<p class="result_genre">' + data.genre + '</p>';
-            result += '<p class="result_imdb">' + data.imdb + '</p>';
+            // result += '<div class =result>';
+            // result += '<h4 class="result_title">' + data.title + '</h4>';
+            // result += '<p class="result_genre">' + data.genre + '</p>';
+            // result += '<p class="result_imdb">' + data.imdb + '</p>';
+            result += '<a href="' + data.imdb + '" target="_blank">';
             result += '<img src="'+ data.poster + '"width="300" height="400">';
-            result += '</div>';
+            result += '</a>';
+            // result += '</div>';
         }
         $("#result_list").html(result);
         $("#btn-search1").prop("disabled", false);
@@ -75,7 +76,10 @@ function test1() {
 function test2() {
     var search = {}
     search["title"] = $("#title").val();
-    search["limit"] = $("#limit").val();
+    search["limit"] = $("#limit_hidden").val();
+    console.log($("#limit_hidden").val());
+    if ($("#limit").val() != "")
+        search["limit"] = $("#limit").val();
     // search["sex"] = $("#sex").val();
 
     console.log(search);
@@ -88,18 +92,18 @@ function test2() {
         dataType: "json",
         type: "post"
     }).done(function(datas) {
-        var result;
+        var result = "";
         var i;
         for (i=0; i < datas.length; i++) {
             var data = datas[i];
-            result += '<div class =result>';
-            result += '<h4 class="result_title">' + data.title + '</h4>';
-            result += '<p class="result_genre">' + data.genre + '</p>';
-            result += '<p class="result_imdb">' + data.imdb + '</p>';
+            // result += '<div class =result>';
+            // result += '<h4 class="result_title">' + data.title + '</h4>';
+            // result += '<p class="result_genre">' + data.genre + '</p>';
+            // result += '<p class="result_imdb">' + data.imdb + '</p>';
             result += '<a href="' + data.imdb + '" target="_blank">';
-            result += '<img src="'+ data.poster + ' "width="300" height="400">';
+            result += '<img src="'+ data.poster + '" width="300" height="400">';
             result += '</a>';
-            result += '</div>';
+            // result += '</div>';
         }
         $("#result_list").html(result);
         $("#btn-search2").prop("disabled", false);
