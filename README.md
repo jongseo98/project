@@ -36,3 +36,6 @@ Lastly, we do not output the movie that we input even if the movie has high weig
 
 #### Reference for IMDB weighted rating:
 https://www.kaggle.com/alsojmc/movie-recommender-systems 
+
+![image](https://user-images.githubusercontent.com/38205047/122570496-c4bf5280-d086-11eb-9c5c-16b9d3464fac.png)
+
