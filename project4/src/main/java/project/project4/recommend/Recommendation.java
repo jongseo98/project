@@ -396,6 +396,25 @@ public class Recommendation {
                             }
                             System.out.println("count: " + count);
                         }
+                        System.out.println("count: " + count);
+                        System.out.println("rate: " + ratecount);
+                        for (int i=0; i<count; i++)
+                            c += movieGroup[i][3];
+                        c = c/count;
+                        for (int i=0; i<count; i++) {
+                            movieGroup[i][5] = (movieGroup[i][1])/(movieGroup[i][2]+ratecount/count)+(ratecount*c)/(count*(movieGroup[i][2]+ratecount/count));
+                        }
+
+                        Arrays.sort(movieGroup, new Comparator<double[]>(){
+                            public int compare(double[] m1, double[] m2) {
+                                if (m1[5] == m2[5]) {
+                                    return Double.compare(m2[3], m1[3]);
+                                }
+                                else {
+                                    return Double.compare(m2[5], m1[5]);
+                                }
+                            }
+                        });
                     } else {
                         System.out.println("case B");
                         List<MovieRating> movieRating_list= movieRatingRepository.findAll();
@@ -458,23 +477,8 @@ public class Recommendation {
                             }
                         }
                     }
-                }
-                
-                
-
-                System.out.println("count: " + count);
-                System.out.println("rate: " + ratecount);
-                if (limit_null) {
-                    if (count < limit) {
-                        occupation = "";
-                        occup_null = true;
-                        System.out.println("count < limit");
-                        continue;
-                    }
-                }
-                check = false;
-
-                if (movieRatingRepository.count() == 0) {
+                    System.out.println("count: " + count);
+                    System.out.println("rate: " + ratecount);
                     for (int i=0; i<count; i++)
                         c += movieGroup[i][3];
                     c = c/count;
@@ -493,18 +497,30 @@ public class Recommendation {
                         }
                     });
                 }
+                
+                if (limit_null) {
+                    if (count < limit) {
+                        occupation = "";
+                        occup_null = true;
+                        System.out.println("count < limit");
+                        continue;
+                    }
+                }
+                check = false;
 
-                System.out.println("Store movieRating");
-                for (int i=0; i <count; i ++) {
-                    int id = (int) movieGroup[i][0];
-                    String movieId = Integer.toString(id);
-                    int ratingSum = (int) movieGroup[i][1];
-                    int ratingNum = (int) movieGroup[i][2];
-                    MovieRating mv = new MovieRating(movieId, ratingSum, ratingNum);
-                    movieRatingRepository.save(mv);
+                if (movieRatingRepository.count() == 0) {
+                    System.out.println("Store movieRating");
+                    for (int i=0; i <count; i ++) {
+                        int id = (int) movieGroup[i][0];
+                        String movieId = Integer.toString(id);
+                        int ratingSum = (int) movieGroup[i][1];
+                        int ratingNum = (int) movieGroup[i][2];
+                        MovieRating mv = new MovieRating(movieId, ratingSum, ratingNum);
+                        movieRatingRepository.save(mv);
+                    }
                 }
 
-                // for (int i=0; i <count; i++) {
+                // for (int i=0; i <10; i++) {
                 //     System.out.println("movieId: " + movieGroup[i][0]);
                 //     System.out.println("ratingSum: " + movieGroup[i][1]);
                 //     System.out.println("ratingNum: " + movieGroup[i][2]);
@@ -518,6 +534,7 @@ public class Recommendation {
                 int index1 = 0;
                 if (!genre_null) {
                     if (genre.contains("|")) {
+                        System.out.println("Check1");
                         for (int i = 0; i < count; i++) {
                             if (index1 >= limit)
                                 break;
@@ -533,11 +550,25 @@ public class Recommendation {
                                 for (String s: genres_list) {
                                     if (input.equalsIgnoreCase(s)) {
                                         movieGroup[i][4] = 1;
+                                        System.out.println("movieId: " + movieGroup[i][0]);
+                                        System.out.println("ratingSum: " + movieGroup[i][1]);
+                                        System.out.println("ratingNum: " + movieGroup[i][2]);
+                                        System.out.println("ratingAvg: " + movieGroup[i][3]);
+                                        System.out.println("ratingSort: " + movieGroup[i][5]);
+                                        System.out.println("-------------------");
                                         Result result = new Result();
                                         result.setTitle(movie.getTitle());
                                         result.setGenre(movie.getGenre());
                                         Link link = linkRepository.findById(movieId).get();
                                         result.setImdb("http://www.imdb.com/title/tt" + link.getImdbId());
+                                        System.out.println();
+                                        boolean exist_poster = movieposterRepository.existsById(movieId);
+                                        if (exist_poster) {
+                                            MoviePoster moviePoster = movieposterRepository.findById(movieId).get();
+                                            result.setPoster(moviePoster.getUrl());
+                                        } else {
+                                            result.setPoster("noimg.png");
+                                        }
                                         resultRepository.save(result);
                                         index1++;
                                         flag = true;
@@ -550,6 +581,7 @@ public class Recommendation {
 
                             if (i == (count -1)) {
                                 if (index1 < limit) {
+                                    System.out.println("Check2");
                                     // System.out.println("First index: " + index);
                                     for (int j = 0; j < count; j++) {
                                         if (index1 >= limit)
@@ -566,6 +598,13 @@ public class Recommendation {
                                         result.setGenre(movie2.getGenre());
                                         Link link = linkRepository.findById(movieId).get();
                                         result.setImdb("http://www.imdb.com/title/tt" + link.getImdbId());
+                                        boolean exist_poster = movieposterRepository.existsById(movieId);
+                                        if (exist_poster) {
+                                            MoviePoster moviePoster = movieposterRepository.findById(movieId).get();
+                                            result.setPoster(moviePoster.getUrl());
+                                        } else {
+                                            result.setPoster("noimg.png");
+                                        }
                                         resultRepository.save(result);;
                                         index1++;
                                     }
@@ -577,6 +616,7 @@ public class Recommendation {
                             System.out.println("title: " + r.getTitle());
                             System.out.println("gerne: " + r.getGenre());
                             System.out.println("imdb: " + r.getImdb());
+                            System.out.println("poster: " + r.getPoster());
                             System.out.println("-----------");
                         }
 
@@ -593,11 +633,24 @@ public class Recommendation {
                             for (String s: genres_list) {
                                 if (genre.equalsIgnoreCase(s)) {
                                     movieGroup[i][4] = 1;
+                                    System.out.println("movieId: " + movieGroup[i][0]);
+                                    System.out.println("ratingSum: " + movieGroup[i][1]);
+                                    System.out.println("ratingNum: " + movieGroup[i][2]);
+                                    System.out.println("ratingAvg: " + movieGroup[i][3]);
+                                    System.out.println("ratingSort: " + movieGroup[i][5]);
+                                    System.out.println("-------------------");
                                     Result result = new Result();
                                     result.setTitle(movie.getTitle());
                                     result.setGenre(movie.getGenre());
                                     Link link = linkRepository.findById(movieId).get();
                                     result.setImdb("http://www.imdb.com/title/tt" + link.getImdbId());
+                                    boolean exist_poster = movieposterRepository.existsById(movieId);
+                                    if (exist_poster) {
+                                        MoviePoster moviePoster = movieposterRepository.findById(movieId).get();
+                                        result.setPoster(moviePoster.getUrl());
+                                    } else {
+                                        result.setPoster("noimg.png");
+                                    }
                                     resultRepository.save(result);
                                     index1++;
                                     break; 
@@ -621,6 +674,13 @@ public class Recommendation {
                                         result.setGenre(movie2.getGenre());
                                         Link link = linkRepository.findById(movieId).get();
                                         result.setImdb("http://www.imdb.com/title/tt" + link.getImdbId());
+                                        boolean exist_poster = movieposterRepository.existsById(movieId);
+                                        if (exist_poster) {
+                                            MoviePoster moviePoster = movieposterRepository.findById(movieId).get();
+                                            result.setPoster(moviePoster.getUrl());
+                                        } else {
+                                            result.setPoster("noimg.png");
+                                        }
                                         resultRepository.save(result);
                                         index1++;
                                     }
@@ -632,12 +692,19 @@ public class Recommendation {
                             System.out.println("title: " + r.getTitle());
                             System.out.println("gerne: " + r.getGenre());
                             System.out.println("imdb: " + r.getImdb());
+                            System.out.println("poster: " + r.getPoster());
                             System.out.println("-----------");
                         }
                     }
                 } else {
                     for (int i=0; i < limit; i++) {
                         int id = (int)movieGroup[i][0];
+                        System.out.println("movieId: " + movieGroup[i][0]);
+                        System.out.println("ratingSum: " + movieGroup[i][1]);
+                        System.out.println("ratingNum: " + movieGroup[i][2]);
+                        System.out.println("ratingAvg: " + movieGroup[i][3]);
+                        System.out.println("ratingSort: " + movieGroup[i][5]);
+                        System.out.println("-------------------");
                         String movieId = Integer.toString(id);
                         Movie movie = movieRepository.findById(movieId).get();
                         Result result = new Result();
@@ -645,6 +712,13 @@ public class Recommendation {
                         result.setGenre(movie.getGenre());
                         Link link = linkRepository.findById(movieId).get();
                         result.setImdb("http://www.imdb.com/title/tt" + link.getImdbId());
+                        boolean exist_poster = movieposterRepository.existsById(movieId);
+                        if (exist_poster) {
+                            MoviePoster moviePoster = movieposterRepository.findById(movieId).get();
+                            result.setPoster(moviePoster.getUrl());
+                        } else {
+                            result.setPoster("noimg.png");
+                        }
                         resultRepository.save(result);
                     }
                     List<Result> resultList = resultRepository.findAll();
@@ -652,6 +726,7 @@ public class Recommendation {
                         System.out.println("title: " + r.getTitle());
                         System.out.println("gerne: " + r.getGenre());
                         System.out.println("imdb: " + r.getImdb());
+                        System.out.println("poster: " + r.getPoster());
                         System.out.println("-----------");
                     }
                 }

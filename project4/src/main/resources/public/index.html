@@ -10,26 +10,72 @@
         <h1>part1</h1>
         <form id="search-form1">
             <div>
-                <label>gender</label>
+                <select name="gender" id="gender">
+                    <option value="">Gender</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+                <select name="age" id="age">
+                    <option value="">Age</option>
+                    <option value="1">1~17</option>
+                    <option value="18">18~24</option>
+                    <option value="25">25~34</option>
+                    <option value="35">35~44</option>
+                    <option value="45">45~49</option>
+                    <option value="50">50~55</option>
+                    <option value="56">56~</option>
+                </select>
+                <select name="occupation" id="occupation">
+                    <option value="">Occupation</option>
+                    <option value="academic">Academic/Educator</option>
+                    <option value="artist">Artist</option>
+                    <option value="clerical">Clerical/Admin</option>
+                    <option value="college">College/Grad student</option>
+                    <option value="customerservice">Customer Service</option>
+                    <option value="doctor">Doctor/Health Care</option>
+                    <option value="executive">Executive/Managerial</option>
+                    <option value="farmer">Farmer</option>
+                    <option value="homemaker">Homemaker</option>
+                    <option value="K-12student">K-12 Student</option>
+                    <option value="lawyer">Lawyer</option>
+                    <option value="programmer">Programmer</option>
+                    <option value="retired">Retired</option>
+                    <option value="sales">Sales/Marketing</option>
+                    <option value="scientist">Scientist</option>
+                    <option value="self-employed">Self-Employed</option>
+                    <option value="technician">Technician/Engineer</option>
+                    <option value="tradesman">Tradesman/Craftsman</option>
+                    <option value="unemployed">Unemployed</option>
+                    <option value="writer">Writer</option>
+                </select>
                 <div>
-                    <input type="text" id="gender" />
+                    <label><input type="checkbox" name="genre" value="Action"> Action</label>
+                    <label><input type="checkbox" name="genre" value="Adventure"> Adventure</label>
+                    <label><input type="checkbox" name="genre" value="Animation"> Animation</label>
+                    <label><input type="checkbox" name="genre" value="Children's"> Children's</label>
+                    <label><input type="checkbox" name="genre" value="Comedy"> Comedy</label>
+                    <label><input type="checkbox" name="genre" value="Crime"> Crime</label>
                 </div>
-                <label>age</label>
                 <div>
-                    <input type="text" id="age" />
+                    <label><input type="checkbox" name="genre" value="Documentary"> Documentary</label>
+                    <label><input type="checkbox" name="genre" value="Drama"> Drama</label>
+                    <label><input type="checkbox" name="genre" value="Fantasy"> Fantasy</label>
+                    <label><input type="checkbox" name="genre" value="Film-Noir"> Film-Noir</label>
+                    <label><input type="checkbox" name="genre" value="Horror"> Horror</label>
+                    <label><input type="checkbox" name="genre" value="Musical"> Musical</label>
                 </div>
-                <label>occupation</label>
                 <div>
-                    <input type="text" id="occupation" />
-                </div>
-                <label>genres</label>
-                <div>
-                    <input type="text" id="genres" />
+                    <label><input type="checkbox" name="genre" value="Mystery"> Mystery</label>
+                    <label><input type="checkbox" name="genre" value="Romance"> Romance</label>
+                    <label><input type="checkbox" name="genre" value="Sci-Fi"> Sci-Fi</label>
+                    <label><input type="checkbox" name="genre" value="Thriller"> Thriller</label>
+                    <label><input type="checkbox" name="genre" value="War"> War</label>
+                    <label><input type="checkbox" name="genre" value="Western"> Western</label>
                 </div>
             </div>
             <div>
                 <div>
-                    <button type="submit" id="bth-search">Search</button>
+                    <button type="submit" id="btn-search1">Search</button>
                 </div>
             </div>
         </form>
@@ -47,10 +93,11 @@
             </div>
             <div>
                 <div>
-                    <button type="submit" id="bth-search">Search</button>
+                    <button type="submit" id="btn-search2">Search</button>
                 </div>
             </div>
         </form>
-        <div class="result_list"></div>
+        <div id='result'></div>
+        <div id="result_list"></div>
     </body>
 </html>

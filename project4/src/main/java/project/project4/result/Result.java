@@ -10,13 +10,15 @@ public class Result {
 	private String title;
     private String genre;
     private String imdb;
+    private String poster;
 
     public Result(){}
 
-	public Result(String title, String genre, String imdb) {
+	public Result(String title, String genre, String imdb, String poster) {
 		this.title = title;
         this.genre = genre;
         this.imdb = imdb;
+        this.poster = poster;
 	}
 
 	public String getTitle() {
@@ -41,6 +43,14 @@ public class Result {
 
     public void setImdb(String imdb) {
         this.imdb = imdb;
+    }
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
     }
 
 }

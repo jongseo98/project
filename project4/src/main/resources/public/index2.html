@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>LINKER - Best Movie Choicer</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="hello.js"></script>
+        <style>
+            #jb-container {
+                width: 1400px;
+                margin: 0px auto;
+                padding: 20px;
+                border: 1px solid #bcbcbc;
+            }
+        </style>
+    </head>
+
+    <body style="background-color:rgb(20, 20, 20);">
+        <div style ="text-align : center;">
+            <img src="ICON.png" alt="LINKER" width="324" heigt="202">
+        </div>
+
+        <div id="jb-container">
+            <div style = "text-align : center;">
+                <p style="font-size:30px; color:white; font-family:'Arial Black'">Today's  Recommendation</p>
+            </div>
+            <div style ="text-align : center;">
+                <a href="http://www.imdb.com/title/tt0111161" target="_blank"><img src="https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@..jpg" alt="shoshank" width="200" heigt="400"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="http://www.imdb.com/title/tt0068646" target="_blank"><img src="https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@..jpg" alt="shoshank" width="200" heigt="400"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="http://www.imdb.com/title/tt0108052" target="_blank"><img src="https://m.media-amazon.com/images/M/MV5BNDE4OTMxMTctNmRhYy00NWE2LTg3YzItYTk3M2UwOTU5Njg4XkEyXkFqcGdeQXVyNjU0OTQ0OTY@..jpg" alt="shoshank" width="200" heigt="400"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="http://www.imdb.com/title/tt0082971" target="_blank"><img src="https://m.media-amazon.com/images/M/MV5BMjA0ODEzMTc1Nl5BMl5BanBnXkFtZTcwODM2MjAxNA@@..jpg" alt="shoshank" width="200" heigt="400"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="http://www.imdb.com/title/tt0076759" target="_blank"><img src="https://m.media-amazon.com/images/M/MV5BNzVlY2MwMjktM2E4OS00Y2Y3LWE3ZjctYzhkZGM3YzA1ZWM2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@..jpg" alt="shoshank" width="200" heigt="400"></a>
+            </div>
+
+            <div style ="text-align : center;">
+                <a href="http://www.imdb.com/title/tt0114814" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/en/9/9c/Usual_suspects_ver1.jpg" alt="shoshank" width="200" heigt="400"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="http://www.imdb.com/title/tt0167404" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/en/a/a4/The_Sixth_Sense_poster.png" alt="shoshank" width="200" heigt="400"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="http://www.imdb.com/title/tt0057012" target="_blank"><img src="https://m.media-amazon.com/images/M/MV5BZWI3ZTMxNjctMjdlNS00NmUwLWFiM2YtZDUyY2I3N2MxYTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@..jpg" alt="shoshank" width="200" heigt="400"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="http://www.imdb.com/title/tt0034583" target="_blank"><img src="https://m.media-amazon.com/images/M/MV5BY2IzZGY2YmEtYzljNS00NTM5LTgwMzUtMzM1NjQ4NGI0OTk0XkEyXkFqcGdeQXVyNDYyMDk5MTU@..jpg" alt="shoshank" width="200" heigt="400"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="http://www.imdb.com/title/tt0102926" target="_blank"><img src="https://m.media-amazon.com/images/M/MV5BNjNhZTk0ZmEtNjJhMi00YzFlLWE1MmEtYzM1M2ZmMGMwMTU4XkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg" alt="shoshank" width="200" heigt="400"></a>
+            </div>
+        </div>
+        
+        <div id="jb-container">
+            <div style = "text-align : center;">
+                <p style="font-size:30px; color:white; font-family:'Arial Black'">Recommendation For You</p>
+            </div>
+            <form method="get" action="form-action.html">
+                <div style = "text-align : center;">
+                    <select name="sex" id="sex">
+                        <option value="">Sex</option>
+                        <option value="NULL">None</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                    <select name="age" id="age">
+                        <option value="">Age</option>
+                        <option value="NULL">None</option>
+                        <option value="10">~17</option>
+                        <option value="20">18~24</option>
+                        <option value="30">25~34</option>
+                        <option value="40">35~44</option>
+                        <option value="47">45~49</option>
+                        <option value="50">50~55</option>
+                        <option value="56">56~</option>
+                    </select>
+                    <select name="occupation" id="occupation">
+                        <option value="">Occupation</option>
+                        <option value="NULL">Other</option>
+                        <option value="academic">Academic/Educator</option>
+                        <option value="artist">Artist</option>
+                        <option value="clerical">Clerical/Admin</option>
+                        <option value="college">College/Grad student</option>
+                        <option value="customer service">Customer Service</option>
+                        <option value="doctor">Doctor/Health Care</option>
+                        <option value="executive">Executive/Managerial</option>
+                        <option value="farmer">Farmer</option>
+                        <option value="homemaker">Homemaker</option>
+                        <option value="K-12 student">K-12 Student</option>
+                        <option value="lawyer">Lawyer</option>
+                        <option value="programmer">Programmer</option>
+                        <option value="retired">Retired</option>
+                        <option value="sales">Sales/Marketing</option>
+                        <option value="scientist">Scientist</option>
+                        <option value="self-employed">Self-Employed</option>
+                        <option value="technician/engineer">Technician/Engineer</option>
+                        <option value="tradesman">Tradesman/Craftsman</option>
+                        <option value="unemployed">Unemployed</option>
+                        <option value="writer">Writer</option>
+                    </select>
+                </div>
+                <div style = "text-align : center; color : white;">
+                    <label><input type="checkbox" name="genre" value="Action"> Action</label>
+                    <label><input type="checkbox" name="genre" value="Adventure"> Adventure</label>
+                    <label><input type="checkbox" name="genre" value="Animation"> Animation</label>
+                    <label><input type="checkbox" name="genre" value="Children's"> Children's</label>
+                    <label><input type="checkbox" name="genre" value="Comedy"> Comedy</label>
+                    <label><input type="checkbox" name="genre" value="Crime"> Crime</label>
+                </div>
+                <div style = "text-align : center; color : white;">
+                    <label><input type="checkbox" name="genre" value="Documentary"> Documentary</label>
+                    <label><input type="checkbox" name="genre" value="Drama"> Drama</label>
+                    <label><input type="checkbox" name="genre" value="Fantasy"> Fantasy</label>
+                    <label><input type="checkbox" name="genre" value="Film-Noir"> Film-Noir</label>
+                    <label><input type="checkbox" name="genre" value="Horror"> Horror</label>
+                    <label><input type="checkbox" name="genre" value="Musical"> Musical</label>
+                </div>
+                <div style = "text-align : center; color : white;">
+                    <label><input type="checkbox" name="genre" value="Mystery"> Mystery</label>
+                    <label><input type="checkbox" name="genre" value="Romance"> Romance</label>
+                    <label><input type="checkbox" name="genre" value="Sci-Fi"> Sci-Fi</label>
+                    <label><input type="checkbox" name="genre" value="Thriller"> Thriller</label>
+                    <label><input type="checkbox" name="genre" value="War"> War</label>
+                    <label><input type="checkbox" name="genre" value="Western"> Western</label>
+                </div>
+                <div style = "text-align : center;">
+                    <p><input type="submit" value="Submit"></p>
+                </div>
+            </form>
+        </div>
+
+        <div id="jb-container">
+            <div style = "text-align : center;">
+                <p style="font-size:30px; color:white; font-family:'Arial Black'">Recommendation by Movie</p>
+            </div>
+            <form method="get" action="form-action.html">
+                <div style = "text-align : center; color : white;">
+                    Title : <input id='title' type='text'/><br>
+                    Limit : <input id='limit' type='text'/>
+                </div>
+                <div style = "text-align : center;">
+                    <p><input type="submit" value="Submit"></p>
+                </div>
+            </form>
+        </div>
+
+        </div>
+        <div style ="text-align : center;">
+            <p style="color:white;">Group14 All Right Reserved.</p>
+        </div>
+    </body>
+</html>
