@@ -25,6 +25,6 @@ jobs:
         distribution: 'adopt'
     - name: Build and test
       run: |
-        mvn spring-boot:run
-        mvn test
+        mvn clean package
+        mvn clean test
       working-directory: ${{ env.working-directory }}
