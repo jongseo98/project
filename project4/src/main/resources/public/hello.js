@@ -49,7 +49,7 @@ function test1() {
     $("#btn-search1").prop("disabled", true);
 
     $.ajax({
-        url: "/users/recommendations",
+        url: "/LINKER/users/recommendations",
         data: search,
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         dataType: "json",
@@ -59,14 +59,16 @@ function test1() {
         var i;
         for (i=0; i < datas.length; i++) {
             var data = datas[i];
-            // result += '<div class =result>';
-            // result += '<h4 class="result_title">' + data.title + '</h4>';
-            // result += '<p class="result_genre">' + data.genre + '</p>';
-            // result += '<p class="result_imdb">' + data.imdb + '</p>';
+            result += '<div style="width:300px; height:400px; background-color:white; float:left; border:1px solid black">'
             result += '<a href="' + data.imdb + '" target="_blank">';
-            result += '<img src="'+ data.poster + '"width="300" height="400">';
+            if (data.poster == "noimg.png")
+            {
+                result += '<p style="text-align:center;">' + data.title + "</p>";
+            } else {
+                result += '<img src="'+ data.poster + '"width="300px" height="400px">';
+            }
             result += '</a>';
-            // result += '</div>';
+            result += '</div>';
         }
         $("#result_list").html(result);
         $("#btn-search1").prop("disabled", false);
@@ -86,7 +88,7 @@ function test2() {
     $("#btn-search2").prop("disabled", true);
 
     $.ajax({
-        url: "/movies/recommendations",
+        url: "/LINKER/movies/recommendations",
         data: search,
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         dataType: "json",
@@ -96,14 +98,16 @@ function test2() {
         var i;
         for (i=0; i < datas.length; i++) {
             var data = datas[i];
-            // result += '<div class =result>';
-            // result += '<h4 class="result_title">' + data.title + '</h4>';
-            // result += '<p class="result_genre">' + data.genre + '</p>';
-            // result += '<p class="result_imdb">' + data.imdb + '</p>';
+            result += '<div style="width:300px; height:400px; background-color:white; float:left; border:1px solid black">'
             result += '<a href="' + data.imdb + '" target="_blank">';
-            result += '<img src="'+ data.poster + '" width="300" height="400">';
+            if (data.poster == "noimg.png")
+            {
+                result += '<p style="text-align:center;">' + data.title + "</p>";
+            } else {
+                result += '<img src="'+ data.poster + '"width="300px" height="400px">';
+            }
             result += '</a>';
-            // result += '</div>';
+            result += '</div>';
         }
         $("#result_list").html(result);
         $("#btn-search2").prop("disabled", false);
