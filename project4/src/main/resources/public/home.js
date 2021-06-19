@@ -12,7 +12,7 @@ function homeAll() {
     console.log(search);
 
     $.ajax({
-        url: "/users/recommendations",
+        url: "/LINKER/users/recommendations",
         data: search,
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         dataType: "json",
@@ -49,7 +49,7 @@ function homeAction() {
     console.log(search);
 
     $.ajax({
-        url: "/users/recommendations",
+        url: "/LINKER/users/recommendations",
         data: search,
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         dataType: "json",
@@ -86,7 +86,7 @@ function homeDrama() {
     console.log(search);
 
     $.ajax({
-        url: "/users/recommendations",
+        url: "/LINKER/users/recommendations",
         data: search,
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         dataType: "json",
@@ -123,7 +123,7 @@ function homeAni() {
     console.log(search);
 
     $.ajax({
-        url: "/users/recommendations",
+        url: "/LINKER/users/recommendations",
         data: search,
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         dataType: "json",

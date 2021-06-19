@@ -18,7 +18,7 @@ function test2() {
     $("#btn-search2").prop("disabled", true);
 
     $.ajax({
-        url: "/movies/recommendations",
+        url: "/LINKER/movies/recommendations",
         data: search,
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         dataType: "json",
