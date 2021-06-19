@@ -3,9 +3,13 @@
 
 ### -LINKER page uses Dark Mode which is trend thesedays.-
 
+![image](https://user-images.githubusercontent.com/38205047/122656586-ee679f00-d196-11eb-82cb-045227e77b80.png)
+
+### -Use LINKER And Link Yourself To Movie Heaven-
+
 # User Guideline For The Application LINKER
 This is an application that you can easily get movies recommended based on your personal information. We support 3 kinds of functions.    
-- First, we basically recommend 10 best movies for anyone in our home page.     
+- First, we basically recommend 10 best movies for any genre in home page.    
 - Also we show 10 recommended movies for popular genres such as “Action”, “Drama”, “Animation”.    
 - Second, we recommend 10 best movies based on your user information and genre you prefer.    
 - Third, we recommend number of movies that is related with the movie you like.    
@@ -34,7 +38,7 @@ For basic recommendation for popular genres, you don’t have to search for it. 
 For other functions, you first select the type of searching to use our program.    
 There are two searching types as follows.    
 
-![image](https://user-images.githubusercontent.com/38205047/122651246-87d08a00-d172-11eb-8e3e-b27cf04aefa6.png)
+![image](https://user-images.githubusercontent.com/38205047/122656672-b14fdc80-d197-11eb-8541-6905b1122bf6.png)
 
 For the first function, you can input 4types of information: Sex, Age, Occupation, Genre.    
 All 4 input types are not mandatory. Therefore, you don’t have to select all the information for your input. You may not even input nothing and search the information for recommendation.    
@@ -48,11 +52,13 @@ We support inputs as follows:
 ### - Genre (Multiple choice allowed or no input):     
     "Action", "Adventure", "Animation", "Children's", "Comedy", "Crime", "Documentary", "Drama", "Fantasy", "Film-Noir", "Horror", "Musical", "Mystery", "Romance", "Sci-Fi", "Thriller", "War", "Western"    
 
-After selecting input, you should click search button. Then, the program would recommend you 10 movies based on your input and weighted rating.
+After selecting input, you should click search button. Then, the program would recommend you 10 movies based on your input and weighted rating.    
+
+![image](https://user-images.githubusercontent.com/38205047/122656730-5b2f6900-d198-11eb-83a0-9a9207653509.png)
 
 #### 2. Movie Based Recommendation
 
-![image](https://user-images.githubusercontent.com/38205047/122651251-93bc4c00-d172-11eb-9bef-835c795259f1.png)
+![image](https://user-images.githubusercontent.com/38205047/122656680-c6c50680-d197-11eb-931b-dc05a4789013.png)
 
 For second function, you can input 2 types of information: Movie Title, Limit    
 In this function, movie title is mandatory input. However, Limit is not a mandatory input and if you input nothing the default would be set to 10.    
@@ -66,9 +72,10 @@ After selecting input, you should click search button. Then, the program would r
 
 After the search the output would be shown as follows.    
 
+![image](https://user-images.githubusercontent.com/38205047/122656741-86b25380-d198-11eb-84ff-5100158b7bcb.png)
 
 From the output, you can freely click the posters.    
-Clicking the poster, it would lead you to the page to IMDB of the movie which has more detailed information about the movie.    
+Clicking the poster(even if there is no image, just click it), it would lead you to the page to IMDB of the movie which has more detailed information about the movie.    
 
 ![image](https://user-images.githubusercontent.com/38205047/122651258-9ae35a00-d172-11eb-9c04-b99c46bfac28.png)
 
@@ -77,9 +84,7 @@ Clicking the poster, it would lead you to the page to IMDB of the movie which ha
 1. docker build --tag linker:1.0 .   
 2. docker run -d --name LINKER -p 8080:8080 linker:1.0   
 3-1. docker exec -it LINKER /bin/bash   
-3-2. mongod   
-4-1. docker exec -it LINKER /bin/bash (in another terminal)   
-4-2. mongo   
-5. Open http://localhost:8080/LINKER   
-6. Wait for loading our main page   
-7. Wait for loading movie posters   
+3-2. mongod      
+4. Open http://localhost:8080/LINKER   
+5. Wait for loading our main page   
+6. Wait for loading movie posters   
