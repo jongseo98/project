@@ -6,10 +6,12 @@
         <script src="movie.js"></script>
         <style>
             #jb-container {
-                width: 1400px;
+                width: 1600px;
                 margin: 0px auto;
                 padding: 20px;
+                padding-left: 100px;
                 border: 1px solid #bcbcbc;
+                text-align: left;
             }
             #today-container {
                 width: 1600px;
@@ -17,7 +19,7 @@
                 padding: 20px;
                 padding-left: 100px;
                 border: 1px solid #bcbcbc;
-                text-align: center;
+                text-align: left;
             }
         </style>
     </head>
@@ -27,30 +29,30 @@
         </div>
 
         <div id="jb-container">
-            <div style = "text-align : center;">
-                <p style="font-size:30px; color:white; font-family:'Arial Black'">Page Change</p>
-                <input type=button onClick="location.href='user.html'"value='User based recommendation'>
-                <input type=button onClick="location.href='index.html'"value='Home page'>
+            <div style = "text-align : left;">
+                <p style="font-size:30px; color:white; font-family:'Arial Black'">Menu</p>
+                <input type=button onClick="location.href='user.html'"value='User Based Recommendation' style="width:200px; height:50px;">
+                <input type=button onClick="location.href='index.html'"value='Home Page' style="width:200px; height:50px;">
             </div>
         </div>
 
         <div id="jb-container">
-            <div style = "text-align : center;">
+            <div style = "text-align : left;">
                 <p style="font-size:30px; color:white; font-family:'Arial Black'">Recommendation by Movie</p>
             </div>
             <form id="search-form2">
-                <div style = "text-align : center; color : white;">
-                    <div style = "text-align : center; color : white;">
+                <div style = "text-align : left; color : white;">
+                    <div style = "text-align : left; color : white;">
                         <label>Title : </label>
                         <input type="text" id="title" required />
                     </div>
-                    <div style = "text-align : center; color : white;">
+                    <div style = "text-align : left; color : white;">
                         <label>Limit : </label>
                         <input type="text" id="limit"/>
                         <input type="hidden" id="limit_hidden" value="10"/>
                     </div>
                 </div>
-                <div style = "text-align : center; color : white;">
+                <div style = "text-align : left; color : white;">
                     <div>
                         <button type="submit" id="btn-search2">Search</button>
                     </div>
@@ -59,13 +61,10 @@
         </div>
         
         <div id ='today-container'>
-            <div style = "text-align : center;">
+            <div style = "text-align : left;">
                 <p style="font-size:30px; color:white; font-family:'Arial Black'">Movie Recommendations</p>
             </div>
-            <div style = "text-align : center;">
-                <p style="font-size:20px; color:white;">Click image for more information</p>
-            </div>
-            <div style ="text-align : center; display: inline-block; text-align:center;" id="result_list"></div>
+            <div style ="text-align : left; display: inline-block; text-align:center;" id="result_list"></div>
         </div>
         <div style ="text-align : center;">
             <p style="color:white;">Group14 All Right Reserved.</p>

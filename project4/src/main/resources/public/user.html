@@ -6,10 +6,12 @@
         <script src="user.js"></script>
         <style>
             #jb-container {
-                width: 1400px;
+                width: 1600px;
                 margin: 0px auto;
                 padding: 20px;
+                padding-left: 100px;
                 border: 1px solid #bcbcbc;
+                text-align: left;
             }
             #today-container {
                 width: 1600px;
@@ -17,7 +19,7 @@
                 padding: 20px;
                 padding-left: 100px;
                 border: 1px solid #bcbcbc;
-                text-align: center;
+                text-align: left;
             }
         </style>
     </head>
@@ -27,19 +29,19 @@
         </div>
 
         <div id="jb-container">
-            <div style = "text-align : center;">
-                <p style="font-size:30px; color:white; font-family:'Arial Black'">Page Change</p>
-                <input type=button onClick="location.href='movie.html'"value='Movie based recommendation'>
-                <input type=button onClick="location.href='index.html'"value='Home page'>
+            <div style = "text-align : left;">
+                <p style="font-size:30px; color:white; font-family:'Arial Black'">Menu</p>
+                <input type=button onClick="location.href='movie.html'"value='Movie Based Recommendation' style="width:200px; height:50px;">
+                <input type=button onClick="location.href='index.html'"value='Home Page' style="width:200px; height:50px;">
             </div>
         </div>
 
         <div id ='jb-container'>
-            <div style = "text-align : center;">
+            <div style = "text-align : left;">
                 <p style="font-size:30px; color:white; font-family:'Arial Black'">Recommendation For You</p>
             </div>
             <form id="search-form1">
-                <div style = "text-align : center;">
+                <div style = "text-align : left;">
                     <select name="gender" id="gender">
                         <option value="">Gender</option>
                         <option value="M">Male</option>
@@ -79,7 +81,7 @@
                         <option value="unemployed">Unemployed</option>
                         <option value="writer">Writer</option>
                     </select>
-                    <div style = "text-align : center; color : white;">
+                    <div style = "text-align : left; color : white;">
                         <label><input type="checkbox" name="genre" value="Action"> Action</label>
                         <label><input type="checkbox" name="genre" value="Adventure"> Adventure</label>
                         <label><input type="checkbox" name="genre" value="Animation"> Animation</label>
@@ -87,7 +89,7 @@
                         <label><input type="checkbox" name="genre" value="Comedy"> Comedy</label>
                         <label><input type="checkbox" name="genre" value="Crime"> Crime</label>
                     </div>
-                    <div style = "text-align : center; color : white;">
+                    <div style = "text-align : left; color : white;">
                         <label><input type="checkbox" name="genre" value="Documentary"> Documentary</label>
                         <label><input type="checkbox" name="genre" value="Drama"> Drama</label>
                         <label><input type="checkbox" name="genre" value="Fantasy"> Fantasy</label>
@@ -95,7 +97,7 @@
                         <label><input type="checkbox" name="genre" value="Horror"> Horror</label>
                         <label><input type="checkbox" name="genre" value="Musical"> Musical</label>
                     </div>
-                    <div style = "text-align : center; color : white;">
+                    <div style = "text-align : left; color : white;">
                         <label><input type="checkbox" name="genre" value="Mystery"> Mystery</label>
                         <label><input type="checkbox" name="genre" value="Romance"> Romance</label>
                         <label><input type="checkbox" name="genre" value="Sci-Fi"> Sci-Fi</label>
@@ -105,7 +107,7 @@
                     </div>
                 </div>
                 <div>
-                    <div style = "text-align : center; color : white;">
+                    <div style = "text-align : left; color : white;">
                         <button type="submit" id="btn-search1">Search</button>
                     </div>
                 </div>
@@ -113,13 +115,10 @@
         </div>
         
         <div id ='today-container'>
-            <div style = "text-align : center;">
+            <div style = "text-align : left;">
                 <p style="font-size:30px; color:white; font-family:'Arial Black'">Movie Recommendations</p>
             </div>
-            <div style = "text-align : center;">
-                <p style="font-size:20px; color:white;">Click image for more information</p>
-            </div>
-            <div style ="text-align : center; display: inline-block; text-align:center;" id="result_list"></div>
+            <div style ="text-align : left; display: inline-block; text-align:center;" id="result_list"></div>
         </div>
         <div style ="text-align : center;">
             <p style="color:white;">Group14 All Right Reserved.</p>

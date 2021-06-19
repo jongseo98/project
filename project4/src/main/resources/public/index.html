@@ -6,10 +6,12 @@
         <script src="home.js"></script>
         <style>
             #jb-container {
-                width: 1400px;
+                width: 1600px;
                 margin: 0px auto;
                 padding: 20px;
+                padding-left: 100px;
                 border: 1px solid #bcbcbc;
+                text-align: left;
             }
             #today-container {
                 width: 1600px;
@@ -17,7 +19,7 @@
                 padding: 20px;
                 padding-left: 100px;
                 border: 1px solid #bcbcbc;
-                text-align: center;
+                text-align: left;
             }
             #btn-search1 {
                 visibility: hidden;
@@ -30,36 +32,33 @@
         </div>
 
         <div id="jb-container">
-            <div style = "text-align : center;">
+            <div style = "text-align : left;">
                 <p style="font-size:30px; color:white; font-family:'Arial Black'">Menu</p>
-                <input type=button onClick="location.href='user.html'"value='User Based Recommendation'>
-                <input type=button onClick="location.href='movie.html'"value='Movie Based Recommendation'>
+                <input type=button onClick="location.href='user.html'"value='User Based Recommendation' style="width:200px; height:50px;">
+                <input type=button onClick="location.href='movie.html'"value='Movie Based Recommendation' style="width:200px; height:50px;">
             </div>
         </div>
 
         <div id ='today-container'>
-            <div style = "text-align : center;">
+            <div style = "text-align : left;">
                 <p style="font-size:30px; color:white; font-family:'Arial Black'">Recommended Movies</p>
             </div>
-            <div style = "text-align : center;">
-                <p style="font-size:20px; color:white;">Click image for more information</p>
-            </div>
-            <div style ="text-align : center; display: inline-block; text-align:center;" id="result_all"></div>
+            <div style ="text-align : left; display: inline-block; text-align:center;" id="result_all"></div>
 
-            <div style = "text-align : center;">
+            <div style = "text-align : left;">
                 <p style="font-size:30px; color:white; font-family:'Arial Black'">Recommended Action Movies</p>
             </div>
-            <div style ="text-align : center; display: inline-block; text-align:center;" id="result_action"></div>
+            <div style ="text-align : left; display: inline-block; text-align:center;" id="result_action"></div>
 
-            <div style = "text-align : center;">
+            <div style = "text-align : left;">
                 <p style="font-size:30px; color:white; font-family:'Arial Black'">Recommended Drama Movies</p>
             </div>
-            <div style ="text-align : center; display: inline-block; text-align:center;" id="result_drama"></div>
+            <div style ="text-align : left; display: inline-block; text-align:center;" id="result_drama"></div>
 
-            <div style = "text-align : center;">
+            <div style = "text-align : left;">
                 <p style="font-size:30px; color:white; font-family:'Arial Black'">Recommended Animation Movies</p>
             </div>
-            <div style ="text-align : center; display: inline-block; text-align:center;" id="result_ani"></div>
+            <div style ="text-align : left; display: inline-block; text-align:center;" id="result_ani"></div>
         </div>
         <div style ="text-align : center;">
             <p style="color:white;">Group14 All Right Reserved.</p>
