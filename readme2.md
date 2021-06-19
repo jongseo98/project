@@ -1,6 +1,8 @@
  
 ![image](https://user-images.githubusercontent.com/38205047/122651200-3e803a80-d172-11eb-86d3-e5e57cc47f2f.png)
 
+### -LINKER page uses Dark Mode which is trend thesedays.-
+
 # User Guideline For The Application LINKER
 This is an application that you can easily get movies recommended based on your personal information. We support 3 kinds of functions.    
 - First, we basically recommend 10 best movies for anyone in our home page.     
