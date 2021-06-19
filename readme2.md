@@ -19,14 +19,16 @@ Our program recommends movie based on following algorithm.
 - C: the mean vote across the whole report  
   
 We recommend movies in order that has higher weighted ratings.    
+### When Lack of Data Happens    
 When we are lack of data which usually happens when we input detailed data, we subtract the conditions to increase the scope of data.     
-For first function which we input user information and genres, we subtract detailed conditions of user information first to earn data as much as possible. We subtract occupation first which is the most detailed class in user information. Then, we subtract age which is next detailed information. Since we always have more data for every input with gender and genre, we do not subtract more conditions after subtracting occupation and age.    
-For second function which we input movie that we like, we show data with proper genre, but when we lack of data, we would also show movies with different genre but high weighted ratings.
+- For first function which we input user information and genres, we subtract detailed conditions of user information first to earn data as much as possible. We subtract occupation first which is the most detailed class in user information. Then, we subtract age which is next detailed information. Since we always have more data for every input with gender and genre, we do not subtract more conditions after subtracting occupation and age.    
+- For second function which we input movie that we like, we show data with proper genre, but when we lack of data, we would also show movies with different genre but high weighted ratings.
 
 ![image](https://user-images.githubusercontent.com/38205047/122651233-725b6000-d172-11eb-86ef-00e4f29eccf8.png)
 
 # How To Use LINKER
 For basic recommendation for popular genres, you don’t have to search for it. It appears automatically on the front page.    
+#### 1. User Information Based Recommendation    
 For other functions, you first select the type of searching to use our program.    
 There are two searching types as follows.    
 
@@ -38,13 +40,15 @@ We support inputs as follows:
 ### - Sex (Single choice or no input):     
     Male, Female    
 ### - Age (Single choice or no input):     
-    under 17, 18~24, 25~34, 35~44, 45~49, 50~55, over 56    
+    Under 17, 18~24, 25~34, 35~44, 45~49, 50~55, Over 56    
 ### - Occupation (Single choice or no input):     
     "other", "academic/educator", "artist", "clerical/admin", "college/gradstudent", "customerservice", "doctor/healthcare", "executive/managerial", "farmer", "homemaker", "K-12student", "lawyer", "programmer", "retired", "sales/marketing", "scientist", "self-employed", "technician/engineer", "tradesman/craftsman", "unemployed", "writer"
 ### - Genre (Multiple choice allowed or no input):     
     "Action", "Adventure", "Animation", "Children's", "Comedy", "Crime", "Documentary", "Drama", "Fantasy", "Film-Noir", "Horror", "Musical", "Mystery", "Romance", "Sci-Fi", "Thriller", "War", "Western"    
 
 After selecting input, you should click search button. Then, the program would recommend you 10 movies based on your input and weighted rating.
+
+#### 2. Movie Based Recommendation
 
 ![image](https://user-images.githubusercontent.com/38205047/122651251-93bc4c00-d172-11eb-9bef-835c795259f1.png)
 
