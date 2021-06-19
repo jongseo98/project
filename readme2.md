@@ -71,7 +71,7 @@ Clicking the poster, it would lead you to the page to IMDB of the movie which ha
 ![image](https://user-images.githubusercontent.com/38205047/122651258-9ae35a00-d172-11eb-9c04-b99c46bfac28.png)
 
 
-### - How To Run With DockerFIle
+# How To Run With DockerFIle
 1. docker build --tag linker:1.0 .   
 2. docker run -d --name LINKER -p 8080:8080 linker:1.0   
 3-1. docker exec -it LINKER /bin/bash   
