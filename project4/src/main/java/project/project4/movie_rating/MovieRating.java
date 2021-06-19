@@ -11,6 +11,7 @@ public class MovieRating {
 	private String id;
     private int ratingSum;
     private int ratingNum;
+    private String[] userId;
 
     public MovieRating(){}
 

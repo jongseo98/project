@@ -3,7 +3,7 @@
     <head>
         <title>LINKER - Best Movie Choicer</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script src="home.js"></script>
+        <script src="movie.js"></script>
         <style>
             #jb-container {
                 width: 1400px;
@@ -19,9 +19,6 @@
                 border: 1px solid #bcbcbc;
                 text-align: center;
             }
-            #btn-search1 {
-                visibility: hidden;
-            }
         </style>
     </head>
     <body style="background-color:rgb(20, 20, 20);">
@@ -33,33 +30,42 @@
             <div style = "text-align : center;">
                 <p style="font-size:30px; color:white; font-family:'Arial Black'">Page Change</p>
                 <input type=button onClick="location.href='user.html'"value='User based recommendation'>
-                <input type=button onClick="location.href='movie.html'"value='Movie based recommendation'>
+                <input type=button onClick="location.href='index.html'"value='Home page'>
             </div>
         </div>
 
+        <div id="jb-container">
+            <div style = "text-align : center;">
+                <p style="font-size:30px; color:white; font-family:'Arial Black'">Recommendation by Movie</p>
+            </div>
+            <form id="search-form2">
+                <div style = "text-align : center; color : white;">
+                    <div style = "text-align : center; color : white;">
+                        <label>Title : </label>
+                        <input type="text" id="title" required />
+                    </div>
+                    <div style = "text-align : center; color : white;">
+                        <label>Limit : </label>
+                        <input type="text" id="limit"/>
+                        <input type="hidden" id="limit_hidden" value="10"/>
+                    </div>
+                </div>
+                <div style = "text-align : center; color : white;">
+                    <div>
+                        <button type="submit" id="btn-search2">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
         <div id ='today-container'>
+            <div style = "text-align : center;">
+                <p style="font-size:30px; color:white; font-family:'Arial Black'">Movie Recommendations</p>
+            </div>
             <div style = "text-align : center;">
                 <p style="font-size:20px; color:white;">Click image for more information</p>
             </div>
-            <div style = "text-align : center;">
-                <p style="font-size:30px; color:white; font-family:'Arial Black'">Recommended Movies</p>
-            </div>
-            <div style ="text-align : center; display: inline-block; text-align:center;" id="result_all"></div>
-
-            <div style = "text-align : center;">
-                <p style="font-size:30px; color:white; font-family:'Arial Black'">Recommended Action Movies</p>
-            </div>
-            <div style ="text-align : center; display: inline-block; text-align:center;" id="result_action"></div>
-
-            <div style = "text-align : center;">
-                <p style="font-size:30px; color:white; font-family:'Arial Black'">Recommended Drama Movies</p>
-            </div>
-            <div style ="text-align : center; display: inline-block; text-align:center;" id="result_drama"></div>
-
-            <div style = "text-align : center;">
-                <p style="font-size:30px; color:white; font-family:'Arial Black'">Recommended Animation Movies</p>
-            </div>
-            <div style ="text-align : center; display: inline-block; text-align:center;" id="result_ani"></div>
+            <div style ="text-align : center; display: inline-block; text-align:center;" id="result_list"></div>
         </div>
         <div style ="text-align : center;">
             <p style="color:white;">Group14 All Right Reserved.</p>

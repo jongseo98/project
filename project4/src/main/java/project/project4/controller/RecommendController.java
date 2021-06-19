@@ -83,10 +83,16 @@ public class RecommendController {
 		return resultList;
 	}
 
-	// @GetMapping("/index") 
-	// public String index() {
-	// 	LOG.info("Getting index.html.");
-	// 	return "index.html";
+	// @GetMapping(value = "/user") 
+	// public String user() {
+	// 	LOG.info("Getting user.html.");
+	// 	return "user.html";
+	// }
+
+	// @GetMapping(value = "/movie") 
+	// public String movie() {
+	// 	LOG.info("Getting movie.html.");
+	// 	return "movie.html";
 	// }
 
 }
