@@ -83,8 +83,6 @@ Clicking the poster(even if there is no image, just click it), it would lead you
 # How To Run With DockerFIle
 1. docker build --tag linker:1.0 .   
 2. docker run -d --name LINKER -p 8080:8080 linker:1.0   
-3-1. docker exec -it LINKER /bin/bash   
-3-2. mongod      
 4. Open http://localhost:8080/LINKER   
 5. Wait for loading our main page   
 6. Wait for loading movie posters   
